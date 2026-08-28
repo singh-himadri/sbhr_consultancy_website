@@ -1,0 +1,38 @@
+.hero {
+  position: relative;
+  padding: 4.5rem 0 3.5rem;
+  background: radial-gradient(ellipse 90% 80% at 50% 0%, #F1F7FD 0%, #FFFFFF 65%);
+  border-bottom: 1px solid rgba(8, 58, 101, 0.06);
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.15rem;
+}
+
+.eyebrow { animation: fadeInUp 0.7s var(--ease-out) both; }
+
+.title {
+  font-size: clamp(2.15rem, 4.6vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  max-width: 20ch;
+  animation: fadeInUp 0.8s var(--ease-out) 0.1s both;
+}
+
+.lede {
+  font-size: 1.06rem;
+  line-height: 1.72;
+  color: var(--color-text-muted);
+  max-width: 44rem;
+  animation: fadeInUp 0.8s var(--ease-out) 0.22s both;
+}
+
+@media (max-width: 768px) {
+  .hero { padding: 2.75rem 0 2.5rem; }
+  .title { max-width: none; }
+}

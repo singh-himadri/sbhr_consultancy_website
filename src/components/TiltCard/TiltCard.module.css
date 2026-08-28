@@ -1,0 +1,46 @@
+.tilt {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  --spot-x: 50%;
+  --spot-y: 0%;
+
+  position: relative;
+  transform-style: preserve-3d;
+  transform: perspective(900px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+  transition: transform 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out);
+  will-change: transform;
+}
+
+/* Highlight that follows the cursor across the card face */
+.spotlight {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    420px circle at var(--spot-x) var(--spot-y),
+    rgba(255, 255, 255, 0.55),
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.tilt:hover .spotlight { opacity: 1; }
+
+.inner {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  transform: translateZ(28px);
+}
+
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .tilt {
+    transform: none !important;
+    transition: none;
+  }
+  .spotlight { display: none; }
+  .inner { transform: none; }
+}

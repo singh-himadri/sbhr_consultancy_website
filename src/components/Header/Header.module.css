@@ -1,66 +1,45 @@
 /* ═══════════════════════════════════════════════════════════════
-   SPECTRUM.LIFE STYLE HEADER
-   Initial: Header height 150px. Centered large logo. Nav centered below.
-   Scrolled: Header height 64px. Logo transitions to left, nav moves to right.
+   HEADER — translucent bar that compresses on scroll.
+   Rest state:    tall, logo centred, nav beneath it.
+   Scrolled state: slim, logo left, nav and CTA right.
    ═══════════════════════════════════════════════════════════════ */
 
-/* ── Top Announcement Banner ──────────────────────────────── */
-.banner {
-  background: #E8E5FF;
-  color: #1A1640;
-  font-family: var(--font-sans);
-  font-size: 0.82rem;
-  font-weight: 500;
-  padding: 0.55rem 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.9rem;
-  border-bottom: 1px solid rgba(96, 74, 255, 0.12);
-  position: relative;
-  z-index: 1001;
-}
-
-.bannerLink {
-  font-weight: 700;
-  color: var(--color-primary);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  transition: color 0.2s;
-}
-.bannerLink:hover { color: var(--color-accent); }
-
-/* Spacer to prevent layout shift of fixed header */
 .headerSpacer {
-  height: 160px;
+  height: var(--header-h);
   width: 100%;
 }
 
-/* ── Sticky Header Wrapper ───────────────────────────────── */
 .header {
   position: fixed;
-  top: 0; /* Sits exactly below the static banner */
+  top: 0;
   left: 0;
   right: 0;
-  height: 160px;
+  height: var(--header-h);
   z-index: 1000;
-  background: #FFFFFF;
-  border-bottom: 1px solid rgba(8, 58, 101, 0.08);
-  transition: height 350ms cubic-bezier(0.4, 0, 0.2, 1), top 350ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 350ms ease;
   display: flex;
   align-items: center;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(8, 58, 101, 0.07);
+  transition:
+    height 380ms var(--ease-out),
+    background-color 380ms ease,
+    box-shadow 380ms ease,
+    border-color 380ms ease;
 }
 
 .scrolled {
-  top: 0; /* Slides up to cover the banner when scrolled */
-  height: 80px;
-  box-shadow: 0 4px 24px rgba(8, 58, 101, 0.08);
+  height: var(--header-h-scrolled);
+  background: rgba(255, 255, 255, 0.86);
+  border-bottom-color: rgba(8, 58, 101, 0.1);
+  box-shadow: 0 8px 32px rgba(8, 58, 101, 0.09);
 }
 
 .container {
   position: relative;
   width: 100%;
-  max-width: 1320px;
+  max-width: 1340px;
   margin: 0 auto;
   padding: 0 2rem;
   height: 100%;
@@ -68,7 +47,20 @@
   align-items: center;
 }
 
-/* ── Single Logo Element Animation (Slide & Scale) ────────── */
+/* ── Scroll progress rail ─────────────────────────────────── */
+.progress {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 2px;
+  background: var(--grad-mixed);
+  transform-origin: left;
+  transform: scaleX(var(--scroll-progress, 0));
+  pointer-events: none;
+}
+
+/* ── Logo ─────────────────────────────────────────────────── */
 .logo {
   display: flex;
   align-items: center;
@@ -78,14 +70,14 @@
   left: 50%;
   top: 18px;
   transform: translate(-50%, 0);
-  transition: left 380ms cubic-bezier(0.25, 1, 0.5, 1),
-              top 380ms cubic-bezier(0.25, 1, 0.5, 1),
-              transform 380ms cubic-bezier(0.25, 1, 0.5, 1);
+  transition:
+    left 420ms var(--ease-out),
+    top 420ms var(--ease-out),
+    transform 420ms var(--ease-out);
   z-index: 1002;
   white-space: nowrap;
 }
 
-/* Scrolled state: Slide to the far left and scale down */
 .logoScrolled {
   left: 2rem;
   top: 50%;
@@ -96,33 +88,34 @@
   height: 84px;
   width: auto;
   object-fit: contain;
-  transition: height 380ms cubic-bezier(0.25, 1, 0.5, 1);
+  transition: height 420ms var(--ease-out);
 }
 
-.logoScrolled .logoImg {
-  height: 38px;
-}
+.logoScrolled .logoImg { height: 38px; }
 
 .brandTitle {
   font-family: var(--font-heading);
   font-weight: 800;
-  font-size: 3.8rem;
+  font-size: 3.6rem;
   color: var(--color-primary);
-  letter-spacing: -1.6px;
+  letter-spacing: -0.045em;
   line-height: 1;
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  transition: font-size 380ms cubic-bezier(0.25, 1, 0.5, 1);
+  transition: font-size 420ms var(--ease-out);
 }
 
 .logoScrolled .brandTitle {
   font-size: 1.4rem;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.02em;
 }
 
 .brandAccent {
-  color: var(--color-accent);
+  background: var(--grad-accent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .brandSub {
@@ -130,65 +123,68 @@
   font-size: 0.95em;
   color: var(--color-primary);
   opacity: 0.85;
-  transition: font-size 350ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.logoScrolled .brandSub {
-  font-size: 0.95em;
-}
-
-/* ── Desktop Navigation ───────────────────────────────────── */
+/* ── Desktop navigation ───────────────────────────────────── */
 .nav {
   display: flex;
   align-items: center;
-  gap: 2.25rem;
+  gap: 0.4rem;
   position: absolute;
   left: 50%;
-  bottom: 12px;
+  bottom: 14px;
   transform: translateX(-50%);
-  transition: all 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: left 380ms var(--ease-out), right 380ms var(--ease-out),
+    bottom 380ms var(--ease-out), top 380ms var(--ease-out),
+    transform 380ms var(--ease-out);
 }
 
-/* Scrolled state: Move next to right actions and offset left */
 .navScrolled {
   left: auto;
-  right: 14rem;
+  right: 12.5rem;
   bottom: auto;
   top: 50%;
   transform: translateY(-50%);
 }
 
 .navLink {
+  position: relative;
   font-family: var(--font-sans);
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: 0.93rem;
   color: var(--color-text-muted);
-  transition: color 200ms ease;
+  padding: 0.5rem 0.95rem;
+  border-radius: var(--radius-pill);
   white-space: nowrap;
-  position: relative;
+  transition: color 220ms ease, background-color 260ms ease;
+}
+
+.navLink:hover {
+  color: var(--color-primary);
+  background: rgba(8, 58, 101, 0.06);
 }
 
 .navLink::after {
   content: '';
   position: absolute;
-  bottom: -3px;
-  left: 0;
+  bottom: 2px;
+  left: 50%;
   width: 0;
   height: 2px;
-  background: var(--color-accent);
-  transition: width 250ms ease;
   border-radius: 2px;
+  background: var(--grad-accent);
+  transform: translateX(-50%);
+  transition: width 280ms var(--ease-out);
 }
-
-.navLink:hover { color: var(--color-primary); }
-.navLink:hover::after, .navLinkActive::after { width: 100%; }
 
 .navLinkActive {
   color: var(--color-primary);
   font-weight: 600;
 }
 
-/* ── Actions CTA Button ───────────────────────────────────── */
+.navLinkActive::after { width: 42%; }
+
+/* ── CTA ──────────────────────────────────────────────────── */
 .actions {
   display: flex;
   align-items: center;
@@ -196,27 +192,21 @@
   right: 2rem;
   top: 50%;
   transform: translateY(-50%);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 250ms ease, transform 250ms ease;
+  transition: transform 380ms var(--ease-out);
 }
 
-.actionsScrolled {
-  opacity: 1;
-  pointer-events: all;
-}
-
-/* ── Burger Button ─────────────────────────────────────────── */
+/* ── Burger ───────────────────────────────────────────────── */
 .burger {
   display: none;
   flex-direction: column;
   justify-content: space-between;
-  width: 24px;
+  width: 26px;
   height: 18px;
   background: transparent;
   border: none;
   cursor: pointer;
   padding: 0;
+  margin-left: auto;
   z-index: 1003;
 }
 
@@ -224,107 +214,121 @@
   width: 100%;
   height: 2px;
   background-color: var(--color-primary);
-  transition: var(--transition-smooth);
   border-radius: 2px;
+  transition: transform 320ms var(--ease-out), opacity 200ms ease;
 }
 
 .burgerOpen span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
 .burgerOpen span:nth-child(2) { opacity: 0; }
 .burgerOpen span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
-/* ── Mobile Drawer ───────────────────────────────────────── */
+/* ── Mobile drawer ────────────────────────────────────────── */
 .drawer {
   position: fixed;
   top: 0;
-  right: -100%;
-  width: 300px;
-  height: 100vh;
-  background: #FFFFFF;
-  box-shadow: -10px 0 40px rgba(8, 58, 101, 0.1);
+  right: 0;
+  width: min(320px, 86vw);
+  height: 100dvh;
   z-index: 999;
   display: flex;
   flex-direction: column;
-  padding: 90px 2rem 2rem;
-  transition: right 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 6rem 1.75rem 2rem;
+  background: #FFFFFF;
+  border-left: 1px solid rgba(8, 58, 101, 0.1);
+  box-shadow: -20px 0 60px rgba(8, 58, 101, 0.22);
+  transform: translateX(100%);
+  visibility: hidden;
+  transition: transform 420ms var(--ease-out), visibility 420ms;
 }
 
-.drawerOpen { right: 0; }
+.drawerOpen {
+  transform: translateX(0);
+  visibility: visible;
+}
 
 .drawerNav {
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
-  margin-bottom: 2.5rem;
+  gap: 0.35rem;
+  margin-bottom: 2rem;
 }
 
 .drawerLink {
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
   font-family: var(--font-heading);
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-size: 1.15rem;
+  font-weight: 700;
   color: var(--color-text-main);
-  transition: var(--transition-smooth);
+  padding: 0.85rem 0.9rem;
+  border-radius: var(--radius-md);
+  opacity: 0;
+  transform: translateX(24px);
+  transition: opacity 420ms var(--ease-out), transform 420ms var(--ease-out),
+    background-color 260ms ease, color 260ms ease;
 }
 
-.drawerLink:hover, .drawerLinkActive {
+.drawerOpen .drawerLink {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.drawerLink:hover,
+.drawerLinkActive {
   color: var(--color-accent);
-  padding-left: 0.5rem;
+  background: rgba(230, 129, 0, 0.08);
+}
+
+.drawerIndex {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--color-text-faint);
+  letter-spacing: 0.08em;
 }
 
 .backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(8, 58, 101, 0.35);
-  backdrop-filter: blur(4px);
+  background: rgba(8, 58, 101, 0.3);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   z-index: 998;
   opacity: 0;
   visibility: hidden;
-  transition: var(--transition-smooth);
+  transition: opacity 380ms ease, visibility 380ms;
 }
 
 .backdropVisible { opacity: 1; visibility: visible; }
 
-/* ── Mobile Responsive Behavior (< 860px) ──────────────────── */
-@media (max-width: 860px) {
-  .headerSpacer {
-    height: 72px;
-  }
+/* ── Mobile layout ────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .headerSpacer { height: 72px; }
 
-  .header {
-    height: 72px;
-    top: 32px;
-  }
+  .header { height: 72px; }
+  .scrolled { height: 64px; }
 
-  .scrolled {
-    height: 64px;
-    top: 0;
-  }
+  .container { padding: 0 1.15rem; }
 
   .logo {
     position: relative;
     left: 0 !important;
     top: auto !important;
     transform: none !important;
-    margin-right: auto;
+    gap: 0.6rem;
   }
 
-  .logoImg {
-    height: 34px !important;
-  }
+  .logoImg { height: 34px !important; }
 
   .brandTitle {
     font-size: 1.15rem !important;
-    letter-spacing: -0.5px !important;
+    letter-spacing: -0.02em !important;
   }
 
-  .brandSub {
-    display: none;
-  }
+  .brandSub { display: none; }
 
-  .nav, .actions {
-    display: none !important;
-  }
+  .nav,
+  .actions { display: none !important; }
 
-  .burger {
-    display: flex;
-  }
+  .burger { display: flex; }
 }
