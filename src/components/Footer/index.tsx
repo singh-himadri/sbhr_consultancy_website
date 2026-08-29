@@ -3,6 +3,8 @@ import Link from "next/link";
 import Aurora from "../Aurora";
 import styles from "./Footer.module.css";
 
+import logoImg from "../../../public/Logo.svg";
+
 const NAV_LINKS = [
   { label: "Home", href: "/", id: "footer-link-home" },
   { label: "Browse Jobs", href: "/jobs", id: "footer-link-jobs" },
@@ -31,7 +33,7 @@ export default function Footer() {
           <Link href="/" className={styles.logo} id="footer-logo-link">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/Logo.svg"
+              src={logoImg.src}
               alt="SBHR Logo"
               width={34}
               height={30}

@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./Header.module.css";
 
+import logoImg from "../../../public/Logo.svg";
+
 const navItems = [
   { label: "Home", href: "/" },
   { label: "Jobs", href: "/jobs" },
@@ -76,7 +78,7 @@ export default function Header() {
             id="header-logo-link"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/Logo.svg" alt="SBHR Logo" className={styles.logoImg} />
+            <img src={logoImg.src} alt="SBHR Logo" className={styles.logoImg} />
             <span className={styles.brandTitle}>
               <span className={styles.brandName}>
                 SB<span className={styles.brandAccent}>HR</span>
