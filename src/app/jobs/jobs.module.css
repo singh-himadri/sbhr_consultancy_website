@@ -96,75 +96,245 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   JOB CARDS
+   RESPONSIVE GRID / SPLIT LAYOUT CARDS
    ═══════════════════════════════════════════════════════════ */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+.layoutContainer {
+  width: 100%;
 }
 
-.grid > * { height: 100%; }
+.layoutContainer:not(.hasExpanded) .jobsList {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+  width: 100%;
+}
+
+@media (max-width: 960px) {
+  .layoutContainer:not(.hasExpanded) .jobsList {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .layoutContainer:not(.hasExpanded) .jobsList {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+
+/* Split view layout (when a job details card is expanded/selected) */
+@media (min-width: 861px) {
+  .layoutContainer.hasExpanded {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .layoutContainer.hasExpanded .jobsList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
 
 .jobCard {
   position: relative;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 2rem 1.85rem;
+  padding: 1.85rem 1.65rem;
   border-radius: var(--radius-lg);
   background: rgba(255, 255, 255, 0.62);
   backdrop-filter: blur(18px) saturate(155%);
   -webkit-backdrop-filter: blur(18px) saturate(155%);
   border: 1px solid rgba(255, 255, 255, 0.82);
   box-shadow: var(--glass-shadow);
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+              background 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
   overflow: hidden;
-  transition: transform 0.45s var(--ease-out), box-shadow 0.45s var(--ease-out),
-    background 0.4s ease;
 }
 
 .jobCard:hover {
-  transform: translateY(-7px);
+  transform: translateY(-4px);
   background: rgba(255, 255, 255, 0.85);
   box-shadow: var(--glass-shadow-lifted);
 }
 
-/* Accent rail that fills down the left edge on hover */
+.expandedCard {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border-color: var(--color-azure) !important;
+  box-shadow: 0 15px 35px rgba(6, 32, 58, 0.08) !important;
+  transform: none !important;
+  cursor: default;
+}
+
+/* Desktop active / selected state styling */
+.desktopActiveCardFooter {
+  display: none;
+}
+
+@media (min-width: 861px) {
+  .expandedCard {
+    transform: none !important;
+  }
+
+  .expandedCard .expandedContent {
+    display: none;
+  }
+
+  .expandedCard .desktopActiveCardFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  /* Details Panel - grows naturally to prevent internal scrollbar */
+  .detailsPanel {
+    padding: 2rem 1.75rem;
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(18px) saturate(155%);
+    -webkit-backdrop-filter: blur(18px) saturate(155%);
+    border: 1px solid var(--color-azure);
+    box-shadow: 0 15px 35px rgba(6, 32, 58, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    animation: scaleIn 0.4s var(--ease-spring) both;
+  }
+
+  .detailsHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .detailsHeaderLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .detailsTitle {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    line-height: 1.25;
+  }
+
+  .closeDetailsButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: transform 0.35s var(--ease-spring), background 0.3s ease,
+      color 0.3s ease, border-color 0.3s ease;
+  }
+
+  .closeDetailsButton:hover {
+    transform: rotate(90deg);
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #FFFFFF;
+  }
+
+  .detailsContent {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .detailsFooter {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(8, 58, 101, 0.08);
+  }
+}
+
+/* Mobile & Tablet fallback to expand inline (original behavior) */
+@media (max-width: 860px) {
+  .detailsPanel {
+    display: none;
+  }
+
+  .layoutContainer.hasExpanded .jobsList {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+  }
+
+  .expandedCard .expandedContent {
+    display: flex;
+  }
+
+  .expandedCard .jobDesc {
+    display: block;
+    -webkit-line-clamp: none;
+    overflow: visible;
+    font-size: 0.94rem;
+    line-height: 1.65;
+    color: var(--color-text-muted);
+  }
+}
+
+/* Left Accent Line */
 .jobCard::after {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   bottom: 0;
-  width: 3px;
+  width: 4px;
   background: var(--grad-accent);
   transform: scaleY(0);
   transform-origin: top;
-  transition: transform 0.5s var(--ease-out);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.jobCard:hover::after { transform: scaleY(1); }
+.jobCard:hover::after,
+.expandedCard::after {
+  transform: scaleY(1);
+}
 
 .cardHeader {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.6rem;
 }
 
 .jobTitle {
-  font-size: 1.16rem;
+  font-size: 1.1rem;
   font-weight: 800;
   color: var(--color-primary);
-  line-height: 1.32;
-  transition: color 0.3s ease;
+  line-height: 1.3;
+  transition: color 0.25s ease;
 }
 
-.jobCard:hover .jobTitle { color: var(--color-primary-soft); }
+.jobCard:hover .jobTitle {
+  color: var(--color-primary-soft);
+}
 
 .tags {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.4rem;
   flex-wrap: wrap;
 }
 
@@ -192,41 +362,166 @@
 }
 
 .jobDesc {
-  font-size: 0.92rem;
-  line-height: 1.68;
+  font-size: 0.9rem;
+  line-height: 1.6;
   color: var(--color-text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
+/* Card Footer (Collapsed) */
 .cardFooter {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  flex-wrap: wrap;
-  margin-top: auto;
-  padding-top: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .location {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
   font-size: 0.84rem;
   font-weight: 500;
+  color: var(--color-text-faint);
+}
+
+.location svg {
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.viewDetailsText {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--font-sans);
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--color-azure);
+  transition: color 0.2s ease;
+}
+
+.jobCard:hover .viewDetailsText {
+  color: var(--color-primary-soft);
+}
+
+/* Expanded Card Content */
+.expandedContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.divider {
+  border: 0;
+  height: 1px;
+  background: rgba(8, 58, 101, 0.08);
+  margin: 0.25rem 0;
+}
+
+.locationExpanded {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.88rem;
+  font-weight: 600;
   color: var(--color-text-muted);
 }
 
-.location svg { color: var(--color-accent); flex-shrink: 0; }
+.locationExpanded svg {
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+/* Rich Text Styling inside Card Body */
+.detailsBody {
+  font-size: 0.94rem;
+  line-height: 1.7;
+  color: var(--color-text-main);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.detailsBody h1,
+.detailsBody h2,
+.detailsBody h3 {
+  font-family: var(--font-heading);
+  color: var(--color-primary);
+  font-weight: 800;
+  margin-top: 0.75rem;
+}
+
+.detailsBody h1 { font-size: 1.35rem; }
+.detailsBody h2 { font-size: 1.22rem; }
+.detailsBody h3 { font-size: 1.12rem; }
+
+.detailsBody p {
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.detailsBody ul,
+.detailsBody ol {
+  padding-left: 1.2rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.detailsBody ul { list-style-type: disc; }
+.detailsBody ol { list-style-type: decimal; }
+
+.detailsBody li {
+  color: var(--color-text-muted);
+}
+
+/* Card Footer Expanded */
+.cardFooterExpanded {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.collapseButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.collapseButton:hover {
+  color: var(--color-primary);
+}
+
+.collapseButton svg {
+  transition: transform 0.2s ease;
+}
 
 /* ── Empty state ──────────────────────────────────────────── */
 .noJobs {
-  grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   gap: 0.6rem;
-  padding: 4rem 2rem;
+  padding: 4.5rem 2rem;
   border-radius: var(--radius-lg);
   background: rgba(255, 255, 255, 0.55);
   backdrop-filter: blur(16px);
@@ -461,8 +756,10 @@
 /* ═══════════════════════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════════════════════ */
-@media (max-width: 900px) {
-  .grid { grid-template-columns: 1fr; }
+@media (max-width: 960px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 640px) {
@@ -478,11 +775,12 @@
   .select { min-width: 0; width: 100%; }
   .countLabel { padding-bottom: 0; }
 
-  .jobCard { padding: 1.5rem 1.35rem; }
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
 
-  .cardFooter {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.85rem;
+  .jobCard {
+    padding: 1.5rem 1.35rem;
   }
 }

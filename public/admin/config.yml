@@ -1,0 +1,25 @@
+backend:
+  name: github
+  repo: singh-himadri/sbhr_consultancy_website
+  branch: main
+
+local_backend: true
+
+media_folder: public/images
+public_folder: /images
+
+collections:
+  - name: "jobs"
+    label: "Job Openings"
+    folder: "src/content/jobs"
+    create: true
+    format: "json"
+    slug: "{{id}}"
+    fields:
+      - {label: "ID (unique slug, e.g. senior-dev)", name: "id", widget: "string"}
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Department", name: "department", widget: "select", options: ["Engineering", "Design", "Operations"]}
+      - {label: "Job Type", name: "type", widget: "select", options: ["Full-Time", "Contract"]}
+      - {label: "Location", name: "location", widget: "string"}
+      - {label: "Short Description (Card view)", name: "description", widget: "text"}
+      - {label: "Full Details (Markdown details)", name: "details", widget: "markdown"}
