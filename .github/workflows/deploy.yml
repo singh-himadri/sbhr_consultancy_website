@@ -36,11 +36,13 @@ jobs:
           elif [ -f "${{ github.workspace }}/package-lock.json" ]; then
             echo "manager=npm" >> $GITHUB_OUTPUT
             echo "command=ci" >> $GITHUB_OUTPUT
-            echo "runner=npx --no-install" >> $GITHUB_OUTPUT
+            echo "runner=npm" >> $GITHUB_OUTPUT
             exit 0
           else
-            echo "Unable to determine package manager" >&2
-            exit 1
+            echo "manager=npm" >> $GITHUB_OUTPUT
+            echo "command=install" >> $GITHUB_OUTPUT
+            echo "runner=npm" >> $GITHUB_OUTPUT
+            exit 0
           fi
 
       - name: Setup Node
@@ -67,7 +69,7 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.runner }} ${{ steps.detect-package-manager.outputs.command }}
 
       - name: Build with Next.js
-        run: ${{ steps.detect-package-manager.outputs.runner }} next build
+        run: ${{ steps.detect-package-manager.outputs.runner }} run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
