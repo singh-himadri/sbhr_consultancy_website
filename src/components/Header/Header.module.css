@@ -452,11 +452,13 @@
   .logoImg { height: 34px !important; }
 
   .brandTitle {
-    font-size: 1.15rem !important;
+    font-size: 1.1rem !important;
     letter-spacing: -0.02em !important;
   }
 
-  .brandSub { display: none; }
+  .brandSub {
+    font-size: 0.88em;
+  }
 
   .nav,
   .actions { display: none !important; }
