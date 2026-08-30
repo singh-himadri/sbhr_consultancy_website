@@ -14,10 +14,11 @@ const NAV_LINKS = [
 ];
 
 const SERVICE_LINKS = [
-  { label: "Permanent Recruitment", href: "/services#permanent", id: "footer-link-permanent" },
-  { label: "Contract Staffing", href: "/services#contract", id: "footer-link-contract" },
-  { label: "Workforce Solutions", href: "/services#workforce", id: "footer-link-workforce" },
-  { label: "Executive Search", href: "/services#workforce", id: "footer-link-executive" },
+  { label: "Human Capital & Talent", href: "/services/human-capital", id: "footer-link-human-capital" },
+  { label: "Contact Centre & CX", href: "/services/contact-centre", id: "footer-link-contact-centre" },
+  { label: "Business Process & Ops", href: "/services/business-process", id: "footer-link-business-process" },
+  { label: "Consulting & Advisory", href: "/services/consulting-advisory", id: "footer-link-consulting" },
+  { label: "Global Workforce", href: "/services/global-workforce", id: "footer-link-global-workforce" },
 ];
 
 export default function Footer() {

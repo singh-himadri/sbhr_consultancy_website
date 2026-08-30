@@ -7,17 +7,27 @@ import styles from "./Header.module.css";
 
 import logoImg from "../../../public/Logo.svg";
 
+const SERVICE_LINKS = [
+  { label: "Human Capital & Talent", href: "/services/human-capital", id: "nav-svc-hc" },
+  { label: "Contact Centre & CX", href: "/services/contact-centre", id: "nav-svc-cx" },
+  { label: "Business Process & Ops", href: "/services/business-process", id: "nav-svc-bpo" },
+  { label: "Consulting & Advisory", href: "/services/consulting-advisory", id: "nav-svc-ca" },
+  { label: "Global Workforce", href: "/services/global-workforce", id: "nav-svc-gw" },
+];
+
 const navItems = [
   { label: "Home", href: "/" },
   { label: "Jobs", href: "/jobs" },
-  { label: "Services", href: "/services" },
+  { label: "Services", href: "/services", hasDropdown: true },
   { label: "About Us", href: "/about" },
   { label: "Contact Us", href: "/contact" },
 ];
 
+
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [servicesExpanded, setServicesExpanded] = useState(false);
   const pathname = usePathname();
   const headerRef = useRef<HTMLElement>(null);
   const rafRef = useRef(false);
@@ -91,16 +101,51 @@ export default function Header() {
             className={`${styles.nav} ${scrolled ? styles.navScrolled : ""}`}
             aria-label="Primary navigation"
           >
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`${styles.navLink} ${pathname === item.href ? styles.navLinkActive : ""}`}
-                id={`nav-${item.label.toLowerCase().replace(/\s+/g, "-")}`}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navItems.map((item) =>
+              item.hasDropdown ? (
+                <div key={item.href} className={styles.navDropdownWrapper}>
+                  <Link
+                    href={item.href}
+                    className={`${styles.navLink} ${pathname.startsWith("/services") ? styles.navLinkActive : ""}`}
+                    id="nav-services"
+                  >
+                    {item.label}
+                    <svg className={styles.navChevron} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </Link>
+                  <div className={styles.dropdown} role="menu" aria-label="Services submenu">
+                    <div className={styles.dropdownInner}>
+                      <Link href="/services" className={styles.dropdownAll} id="nav-all-services" role="menuitem">
+                        All Services
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                      </Link>
+                      <span className={styles.dropdownDivider} aria-hidden="true" />
+                      {SERVICE_LINKS.map((svc) => (
+                        <Link
+                          key={svc.id}
+                          href={svc.href}
+                          className={`${styles.dropdownItem} ${pathname === svc.href ? styles.dropdownItemActive : ""}`}
+                          id={svc.id}
+                          role="menuitem"
+                        >
+                          {svc.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`${styles.navLink} ${pathname === item.href ? styles.navLinkActive : ""}`}
+                  id={`nav-${item.label.toLowerCase().replace(/\s+/g, "-")}`}
+                >
+                  {item.label}
+                </Link>
+              )
+            )}
           </nav>
 
           <div className={`${styles.actions} ${scrolled ? styles.actionsScrolled : ""}`}>
@@ -138,20 +183,46 @@ export default function Header() {
         aria-hidden={!drawerOpen}
       >
         <div className={styles.drawerNav}>
-          {navItems.map((item, i) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`${styles.drawerLink} ${pathname === item.href ? styles.drawerLinkActive : ""}`}
-              style={{ transitionDelay: drawerOpen ? `${120 + i * 55}ms` : "0ms" }}
-              onClick={closeDrawer}
-              tabIndex={drawerOpen ? 0 : -1}
-              id={`drawer-${item.label.toLowerCase().replace(/\s+/g, "-")}`}
-            >
-              <span className={styles.drawerIndex}>0{i + 1}</span>
-              {item.label}
-            </Link>
-          ))}
+          {navItems.map((item, i) =>
+            item.hasDropdown ? (
+              <div key={item.href}>
+                <button
+                  className={`${styles.drawerLink} ${pathname.startsWith("/services") ? styles.drawerLinkActive : ""}`}
+                  style={{ transitionDelay: drawerOpen ? `${120 + i * 55}ms` : "0ms", width: "100%", background: "none", border: "none", cursor: "pointer", textAlign: "left" }}
+                  onClick={() => setServicesExpanded((v) => !v)}
+                  aria-expanded={servicesExpanded}
+                  id="drawer-services-toggle"
+                >
+                  <span className={styles.drawerIndex}>0{i + 1}</span>
+                  {item.label}
+                  <svg className={`${styles.drawerChevron} ${servicesExpanded ? styles.drawerChevronOpen : ""}`} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ marginLeft: "auto" }}>
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </button>
+                {servicesExpanded && (
+                  <div className={styles.drawerSubNav}>
+                    <Link href="/services" className={styles.drawerSubLink} onClick={closeDrawer} id="drawer-all-services">All Services</Link>
+                    {SERVICE_LINKS.map((svc) => (
+                      <Link key={svc.id} href={svc.href} className={`${styles.drawerSubLink} ${pathname === svc.href ? styles.drawerSubLinkActive : ""}`} onClick={closeDrawer} id={`drawer-${svc.id}`}>{svc.label}</Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`${styles.drawerLink} ${pathname === item.href ? styles.drawerLinkActive : ""}`}
+                style={{ transitionDelay: drawerOpen ? `${120 + i * 55}ms` : "0ms" }}
+                onClick={closeDrawer}
+                tabIndex={drawerOpen ? 0 : -1}
+                id={`drawer-${item.label.toLowerCase().replace(/\s+/g, "-")}`}
+              >
+                <span className={styles.drawerIndex}>0{i + 1}</span>
+                {item.label}
+              </Link>
+            )
+          )}
         </div>
 
         <Link

@@ -1,8 +1,8 @@
 .page {
   display: flex;
   flex-direction: column;
-  gap: 6rem;
-  padding-bottom: 6rem;
+  gap: 3.5rem;
+  padding-bottom: 5.5rem;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -36,8 +36,8 @@
    KEY FACTORS
    ═══════════════════════════════════════════════════════════ */
 .factorsSection {
-  padding: 5rem 0;
-  background: linear-gradient(180deg, #FFFFFF 0%, var(--color-bg-alt) 45%, #FFFFFF 100%);
+  padding: 4rem 0;
+  background: transparent;
 }
 
 .factorsGrid {
@@ -181,16 +181,14 @@
   display: flex;
   width: max-content;
   gap: 1.1rem;
-  /* Second copy sits to the left; animation slides it right into view. */
-  transform: translateX(-50%);
-  animation: marqueeReverse 60s linear infinite;
+  animation: marqueeRTL 80s linear infinite;
 }
 
 .marquee:hover .marqueeTrack { animation-play-state: paused; }
 
-@keyframes marqueeReverse {
-  from { transform: translateX(-50%); }
-  to   { transform: translateX(0); }
+@keyframes marqueeRTL {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
 
 .marqueeItem {
@@ -369,15 +367,20 @@
    SERVICES
    ═══════════════════════════════════════════════════════════ */
 .servicesSection {
-  padding: 5rem 0;
-  background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 50%, #FFFFFF 100%);
+  padding: 4rem 0;
+  background: transparent;
 }
 
 .servicesGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 1.75rem;
 }
+
+/* Cards 4 & 5 — center them in the second row */
+.servicesGrid > *:nth-child(-n+3) { grid-column: span 2; }
+.servicesGrid > *:nth-child(4) { grid-column: 2 / 4; }
+.servicesGrid > *:nth-child(5) { grid-column: 4 / 6; }
 
 .servicesGrid > * { height: 100%; }
 .serviceTilt { height: 100%; }
@@ -481,7 +484,10 @@
    ═══════════════════════════════════════════════════════════ */
 @media (max-width: 1080px) {
   .factorsGrid { grid-template-columns: repeat(2, 1fr); }
-  .servicesGrid { grid-template-columns: 1fr; }
+  .servicesGrid { grid-template-columns: repeat(2, 1fr); }
+  .servicesGrid > *:nth-child(-n+3),
+  .servicesGrid > *:nth-child(4),
+  .servicesGrid > *:nth-child(5) { grid-column: auto; }
 
   .twoCol {
     grid-template-columns: 1fr;

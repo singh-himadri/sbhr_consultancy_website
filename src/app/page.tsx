@@ -132,12 +132,14 @@ const KEY_FACTORS = [
     id: "stat-expert",
     value: 100,
     suffix: "%",
-    label: "IT Domain Focus",
-    desc: "Deep consulting alignment in software dev, cloud, and tech roles.",
+    label: "Multi-Domain Focus",
+    desc: "Tailored solutions across HR, CX, BPO, Consulting, and Global Workforce.",
     icon: (
       <>
-        <polyline points="16 18 22 12 16 6" />
-        <polyline points="8 6 2 12 8 18" />
+        <rect x="3" y="3" width="7" height="7" />
+        <rect x="14" y="3" width="7" height="7" />
+        <rect x="14" y="14" width="7" height="7" />
+        <rect x="3" y="14" width="7" height="7" />
       </>
     ),
   },
@@ -169,6 +171,16 @@ const KEY_FACTORS = [
 ];
 
 const DOMAINS = [
+  /* ── Human Capital & Talent ──────── */
+  "Permanent Recruitment",
+  "Executive Search",
+  "Contract Staffing",
+  "RPO Solutions",
+  "Talent Advisory",
+  "Leadership Hiring",
+  "Campus Recruitment",
+  "Diversity & Inclusion Hiring",
+  /* ── IT & Technology ──────────────── */
   "React",
   "Node.js",
   "AWS",
@@ -177,28 +189,50 @@ const DOMAINS = [
   "Kubernetes",
   "DevOps",
   "Terraform",
-  "Docker",
   "Python",
   "Java",
-  "Go",
   "TypeScript",
-  "UI/UX Design",
-  "Product Management",
-  "Data Engineering",
-  "Machine Learning",
-  "Cloud Architecture",
-  "Solutions Architecture",
   "Cybersecurity",
-  "QA Automation",
+  "Cloud Architecture",
+  "Machine Learning",
+  "Data Engineering",
   "Site Reliability",
-  "Database Administration",
-  "Network Engineering",
+  /* ── Contact Centre & CX ─────────── */
+  "Customer Experience",
+  "Contact Centre Build",
+  "CX Consulting",
+  "Omnichannel Strategy",
+  "BPO Management",
+  "Voice & Non-Voice",
+  "Customer Success",
+  "CX Technology",
+  /* ── Business Process & Ops ──────── */
+  "Process Optimisation",
+  "Operations Management",
+  "Workflow Automation",
+  "Quality Assurance",
+  "Lean Six Sigma",
   "Business Analysis",
-  "Scrum Master",
-  "CI/CD",
-  "Fullstack",
-  "Mobile Development",
-  "IT Project Management",
+  "Change Management",
+  "ERP Implementation",
+  /* ── Consulting & Advisory ────────── */
+  "HR Strategy",
+  "Workforce Planning",
+  "Organisational Design",
+  "Digital Transformation",
+  "Compliance Advisory",
+  "M&A People Integration",
+  "Compensation & Benefits",
+  "L&D Strategy",
+  /* ── Global Workforce ─────────────── */
+  "Employer of Record",
+  "Global Payroll",
+  "Cross-Border Compliance",
+  "Work Visa & Immigration",
+  "Multi-Country Staffing",
+  "Employment Law",
+  "Secondment Solutions",
+  "Global Mobility",
 ];
 
 const DIFFERENTIATORS = [
@@ -208,22 +242,22 @@ const DIFFERENTIATORS = [
   },
   {
     title: "Veteran-Guided Sourcing",
-    desc: "Our methodologies are guided by tech recruitment veterans with years of expertise.",
+    desc: "Our methodologies are guided by recruitment & HR advisory veterans with years of expertise.",
   },
   {
     title: "Kolkata-based, Nationally Connected",
-    desc: "Harnessing local market leadership to source top-tier tech talent nationwide.",
+    desc: "Harnessing local market leadership to source top-tier talent nationwide.",
   },
 ];
 
 const SERVICES = [
   {
-    id: "card-perm",
-    linkId: "link-perm-details",
-    href: "/services#permanent",
+    id: "card-human-capital",
+    linkId: "link-human-capital-details",
+    href: "/services/human-capital",
     tag: "01",
-    title: "Permanent Recruitment",
-    desc: "Identify and secure long-term tech professionals and leadership whose values and technology skillsets perfectly align with your roadmap.",
+    title: "Human Capital & Talent Solutions",
+    desc: "Build agile, high-performing teams aligned with strategic business objectives through permanent hiring, executive search, and talent advisory.",
     icon: (
       <>
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
@@ -234,32 +268,60 @@ const SERVICES = [
     ),
   },
   {
-    id: "card-contract",
-    linkId: "link-contract-details",
-    href: "/services#contract",
+    id: "card-contact-centre",
+    linkId: "link-contact-centre-details",
+    href: "/services/contact-centre",
     tag: "02",
-    title: "Contract Staffing",
-    desc: "Access agile temporary staffing resources to accelerate critical sprint cycles, handle peak work periods, or backfill temporary gaps.",
+    title: "Contact Centre & Customer Experience",
+    desc: "Design and manage high-performance customer engagement ecosystems that enhance brand perception and drive measurable business outcomes.",
     icon: (
       <>
-        <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-        <line x1="8" y1="21" x2="16" y2="21" />
-        <line x1="12" y1="17" x2="12" y2="21" />
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.84 12 19.79 19.79 0 0 1 1.77 3.4 2 2 0 0 1 3.74 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+        <path d="M14.05 2a9 9 0 0 1 8 7.94" />
+        <path d="M14.05 6A5 5 0 0 1 18 10" />
       </>
     ),
   },
   {
-    id: "card-workforce",
-    linkId: "link-workforce-details",
-    href: "/services#workforce",
+    id: "card-business-process",
+    linkId: "link-business-process-details",
+    href: "/services/business-process",
     tag: "03",
-    title: "Workforce Solutions",
-    desc: "Custom end-to-end recruitment process management, vendor control models, and specialized headhunting for critical niche expertise.",
+    title: "Business Process & Operations",
+    desc: "Streamline and optimise core operations to improve efficiency, accuracy, and scalability through expert process management and automation.",
     icon: (
       <>
-        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-        <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-        <line x1="12" y1="22.08" x2="12" y2="12" />
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+      </>
+    ),
+  },
+  {
+    id: "card-consulting",
+    linkId: "link-consulting-details",
+    href: "/services/consulting-advisory",
+    tag: "04",
+    title: "Consulting & Advisory",
+    desc: "Navigate workforce challenges, operational complexities, and transformation initiatives with strategic advisory services backed by seasoned industry veterans.",
+    icon: (
+      <>
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="8" x2="12" y2="12" />
+        <line x1="12" y1="16" x2="12.01" y2="16" />
+      </>
+    ),
+  },
+  {
+    id: "card-global-workforce",
+    linkId: "link-global-workforce-details",
+    href: "/services/global-workforce",
+    tag: "05",
+    title: "Global Workforce & Employment",
+    desc: "Expand globally with ease — we manage employment compliance, payroll, and workforce administration across geographies so you can focus on growth.",
+    icon: (
+      <>
+        <circle cx="12" cy="12" r="10" />
+        <line x1="2" y1="12" x2="22" y2="12" />
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
       </>
     ),
   },
@@ -389,11 +451,11 @@ export default function Home() {
           <Reveal className={styles.sectionHead} variant="up">
             <span className="eyebrow-pill">What We Deliver</span>
             <h2 className={styles.sectionTitle}>
-              Comprehensive <span className="gradient-text">Talent Sourcing</span> Solutions
+              Comprehensive <span className="gradient-text">Business Solutions</span> Across Every Domain
             </h2>
             <p className={styles.sectionLede}>
-              We provide workforce solutions tailored to your IT scaling roadmap, whether you
-              require immediate project reinforcement or long-term leadership hiring.
+              From talent acquisition and customer experience to process optimisation and global
+              workforce management — we deliver end-to-end solutions that power organisational growth.
             </p>
           </Reveal>
 

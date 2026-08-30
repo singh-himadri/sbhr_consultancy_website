@@ -157,7 +157,7 @@ const STATS = [
   { value: 500, suffix: "+", label: "Placements made" },
   { value: 98, suffix: "%", label: "90-day retention" },
   { value: 24, suffix: "h", label: "Candidate SLA" },
-  { value: 80, suffix: "+", label: "Enterprise clients" },
+  { value: 360, suffix: "°", label: "Consulting approach" },
 ];
 
 export default function HeroSection() {
