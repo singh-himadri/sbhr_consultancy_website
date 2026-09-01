@@ -306,7 +306,7 @@ const DIFFERENTIATORS = [
 const SECTORS = [
   {
     title: "IT & ITES",
-    desc: "Software engineering, cloud infrastructure, AI/ML, cybersecurity, and managed IT services.",
+    desc: "Software engineering, cloud infrastructure, AI/ML, cybersecurity and managed IT and ITES services.",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
@@ -317,7 +317,7 @@ const SECTORS = [
   },
   {
     title: "Engineering",
-    desc: "Core mechanical, civil, electrical, structural, and R&D engineering domain talent.",
+    desc: "Core mechanical, civil, electrical, structural and R&D engineering domain talent.",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <circle cx="12" cy="12" r="3" />
@@ -327,7 +327,7 @@ const SECTORS = [
   },
   {
     title: "Industrial Production",
-    desc: "Manufacturing leadership, plant operations, quality control, and industrial tech.",
+    desc: "Manufacturing leadership, plant operations, quality control and industrial tech.",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4H2v16z" />
@@ -336,7 +336,7 @@ const SECTORS = [
   },
   {
     title: "Financial Ecosystems",
-    desc: "Fintech, banking, capital markets, risk compliance, payments, and advisory.",
+    desc: "Fintech, banking, capital markets, risk compliance, payments and advisory.",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <line x1="12" y1="1" x2="12" y2="23" />
@@ -346,7 +346,7 @@ const SECTORS = [
   },
   {
     title: "Supply Chain",
-    desc: "Logistics management, procurement, warehouse ops, and supply chain alignment.",
+    desc: "Logistics management, procurement, warehouse ops and supply chain alignment.",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <rect x="1" y="3" width="15" height="13" />
@@ -358,7 +358,7 @@ const SECTORS = [
   },
   {
     title: "Hospitality Services",
-    desc: "Hotel management, guest relations, corporate hospitality, and luxury service ops.",
+    desc: "Hotel management, guest relations, corporate hospitality and luxury service ops.",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
@@ -371,7 +371,7 @@ const SECTORS = [
   },
   {
     title: "Energy Infrastructure",
-    desc: "Renewables, power generation, grid engineering, and sustainable energy projects.",
+    desc: "Renewables, power generation, grid engineering and sustainable energy projects.",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
@@ -380,7 +380,7 @@ const SECTORS = [
   },
   {
     title: "Education Systems",
-    desc: "EdTech innovators, institutional leaders, academic administration, and learning design.",
+    desc: "EdTech innovators, institutional leaders, academic administration and learning design.",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
@@ -390,7 +390,7 @@ const SECTORS = [
   },
   {
     title: "Urban Infrastructure",
-    desc: "Smart city engineering, commercial real estate, construction, and public works.",
+    desc: "Smart city engineering, commercial real estate, construction and public works.",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <rect x="4" y="2" width="16" height="20" rx="2" ry="2" />
@@ -406,7 +406,7 @@ const SECTORS = [
   },
   {
     title: "Creative Media",
-    desc: "Digital media, advertising design, content production, brand management, & entertainment.",
+    desc: "Digital media, advertising design, content production, brand management & entertainment.",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <polygon points="23 7 16 12 23 17 23 7" />
@@ -416,7 +416,7 @@ const SECTORS = [
   },
   {
     title: "Life Sciences",
-    desc: "Pharmaceuticals, biotech R&D, clinical trial management, and healthcare administration.",
+    desc: "Pharmaceuticals, biotech R&D, clinical trial management and healthcare administration.",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M10 2v7.31a2 2 0 0 1-.29.99L4.14 19.4A2 2 0 0 0 5.86 22h12.28a2 2 0 0 0 1.72-2.6l-5.57-9.1a2 2 0 0 1-.29-.99V2" />
@@ -427,7 +427,7 @@ const SECTORS = [
   },
   {
     title: "Retail & E-Commerce",
-    desc: "Omnichannel retail leadership, e-commerce ops, merchandising, and customer growth.",
+    desc: "Omnichannel retail leadership, e-commerce ops, merchandising and customer growth.",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
@@ -446,7 +446,7 @@ const SERVICES = [
     href: "/services/human-capital",
     tag: "01",
     title: "Human Capital & Talent Solutions",
-    desc: "Build agile, high-performing teams aligned with strategic business objectives through permanent hiring, executive search, and talent advisory.",
+    desc: "Build agile, high-performing teams aligned with strategic business objectives through permanent hiring, executive search and talent advisory.",
     icon: (
       <>
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
@@ -642,7 +642,7 @@ export default function Home() {
               Industry Sectors & <span className="gradient-text">Domain Expertise</span>
             </h2>
             <p className={styles.sectionLede}>
-              From our core IT recruiting foundation, SBHR Consultancy has expanded across 12+ vital economic sectors, placing top-tier talent in specialized domain functions nationwide.
+              From our recruiting foundation, SBHR Consultancy has expanded across 12+ vital economic sectors, placing top-tier talent in specialized domain functions nationwide.
             </p>
           </Reveal>
 
@@ -673,7 +673,7 @@ export default function Home() {
               Comprehensive <span className="gradient-text">Business Solutions</span> Across Every Domain
             </h2>
             <p className={styles.sectionLede}>
-              From talent acquisition and customer experience to process optimisation and global
+              From talent acquisition and customer experience to process optimisation and <br/> pan india
               workforce management — we deliver end-to-end solutions that power organisational growth.
             </p>
           </Reveal>

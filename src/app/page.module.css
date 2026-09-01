@@ -29,7 +29,7 @@
   color: var(--color-text-muted);
   font-size: 1.03rem;
   line-height: 1.72;
-  max-width: 40rem;
+  max-width: 50rem;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -181,7 +181,7 @@
   display: flex;
   width: max-content;
   gap: 1.1rem;
-  animation: marqueeRTL 80s linear infinite;
+  animation: marqueeRTL 120s linear infinite;
 }
 
 .marquee:hover .marqueeTrack { animation-play-state: paused; }
@@ -504,7 +504,7 @@
 
   .sectionHead { margin-bottom: 2.25rem; }
 
-  .marqueeTrack { animation-duration: 130s; }
+  .marqueeTrack { animation-duration: 160s; }
 }
 
 /* ═══════════════════════════════════════════════════════════
