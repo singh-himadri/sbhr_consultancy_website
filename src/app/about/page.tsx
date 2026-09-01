@@ -6,101 +6,28 @@ import TiltCard from "../../components/TiltCard";
 import CtaBanner from "../../components/CtaBanner";
 import styles from "./about.module.css";
 
-/* ─────────────────────────────────────────────────────────────
-   Kolkata roots — an abstract suspension bridge standing in for
-   the firm's local anchor and its national reach.
-   ───────────────────────────────────────────────────────────── */
-function BridgeVector() {
-  const suspenders = [100, 120, 140, 160, 180, 200, 220, 240];
-
-  return (
-    <svg
-      className={styles.bridgeSvg}
-      viewBox="0 0 340 240"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      role="img"
-      aria-label="Abstract suspension bridge representing SBHR's Kolkata roots and national reach"
-    >
-      <defs>
-        <linearGradient id="deckGrad" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#1D7DC4" stopOpacity="0.25" />
-          <stop offset="50%" stopColor="#083A65" />
-          <stop offset="100%" stopColor="#1D7DC4" stopOpacity="0.25" />
-        </linearGradient>
-        <linearGradient id="archGrad" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#083A65" />
-          <stop offset="50%" stopColor="#1D7DC4" />
-          <stop offset="100%" stopColor="#083A65" />
-        </linearGradient>
-        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#EAF4FD" />
-          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-
-      {/* Sky wash + sun */}
-      <rect x="0" y="0" width="340" height="180" fill="url(#skyGrad)" rx="16" />
-      <circle className={styles.sun} cx="278" cy="52" r="22" fill="#FFB74A" opacity="0.28" />
-      <circle cx="278" cy="52" r="11" fill="#E68100" opacity="0.75" />
-
-      {/* Arch */}
-      <path
-        d="M80 82 Q170 14 260 82"
-        stroke="url(#archGrad)"
-        strokeWidth="4"
-        strokeLinecap="round"
-        fill="none"
-      />
-
-      {/* Towers */}
-      <line x1="80" y1="82" x2="80" y2="170" stroke="#083A65" strokeWidth="4" strokeLinecap="round" />
-      <line x1="260" y1="82" x2="260" y2="170" stroke="#083A65" strokeWidth="4" strokeLinecap="round" />
-
-      {/* Suspenders — draw themselves in sequence */}
-      {suspenders.map((x, i) => {
-        // Height under the parabolic arch at this x position
-        const t = (x - 80) / 180;
-        const archY = 82 - 4 * 68 * t * (1 - t);
-        return (
-          <line
-            key={x}
-            className={styles.suspender}
-            x1={x}
-            y1={archY}
-            x2={x}
-            y2={170}
-            stroke={i % 3 === 0 ? "#E68100" : "#1D7DC4"}
-            strokeOpacity="0.55"
-            strokeWidth="1.5"
-            style={{ animationDelay: `${i * 0.16}s` }}
-          />
-        );
-      })}
-
-      {/* Deck */}
-      <line x1="20" y1="170" x2="320" y2="170" stroke="url(#deckGrad)" strokeWidth="5" strokeLinecap="round" />
-
-      {/* Traffic pulse travelling the deck */}
-      <circle className={styles.traveller} cx="20" cy="170" r="5" fill="#E68100" />
-
-      {/* Tower crown nodes */}
-      <circle className={styles.crown} cx="80" cy="82" r="7" fill="#1D7DC4" />
-      <circle className={styles.crown} cx="260" cy="82" r="7" fill="#1D7DC4" style={{ animationDelay: "1.1s" }} />
-      <circle cx="170" cy="41" r="8" fill="#E68100" />
-      <circle cx="170" cy="41" r="3" fill="#FFFFFF" />
-
-      {/* Water */}
-      <g className={styles.water}>
-        <line x1="40" y1="192" x2="130" y2="192" stroke="#1D7DC4" strokeOpacity="0.28" strokeWidth="3" strokeLinecap="round" />
-        <line x1="150" y1="192" x2="230" y2="192" stroke="#1D7DC4" strokeOpacity="0.2" strokeWidth="3" strokeLinecap="round" />
-        <line x1="70" y1="208" x2="190" y2="208" stroke="#1D7DC4" strokeOpacity="0.22" strokeWidth="3" strokeLinecap="round" />
-        <line x1="210" y1="208" x2="290" y2="208" stroke="#1D7DC4" strokeOpacity="0.16" strokeWidth="3" strokeLinecap="round" />
-        <line x1="110" y1="224" x2="240" y2="224" stroke="#1D7DC4" strokeOpacity="0.14" strokeWidth="3" strokeLinecap="round" />
-      </g>
-    </svg>
-  );
-}
+const SNAPSHOTS = [
+  {
+    num: "2019",
+    label: "Established Year",
+    desc: "Founded in Kolkata, West Bengal with a vision for recruitment excellence.",
+  },
+  {
+    num: "25+ Yrs",
+    label: "Leadership Tenure",
+    desc: "Co-Founder HR & talent acquisition domain mastery.",
+  },
+  {
+    num: "24–48h",
+    label: "Candidate SLA",
+    desc: "Average turnaround to present fully vetted candidate profiles.",
+  },
+  {
+    num: "12+",
+    label: "Industry Domains",
+    desc: "Cross-sector placement expertise across IT, Engineering, Manufacturing, Finance, & Core sectors.",
+  },
+];
 
 const PILLARS = [
   {
@@ -119,15 +46,15 @@ const PILLARS = [
   {
     id: "pillar-speed",
     index: "02",
-    title: "Real-Time Delivery",
-    desc: "We run a pre-vetted database of top-tier talent. This enables our recruiters to share fully verified candidate profiles within 24 hours of brief alignment.",
+    title: "Real-Time Delivery (24–48h)",
+    desc: "We maintain a robust, pre-vetted database of top-tier talent. This enables our recruiters to share fully verified candidate profiles within 24 to 48 hours.",
     icon: <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />,
   },
   {
     id: "pillar-connection",
     index: "03",
     title: "Network Integration",
-    desc: "Our veterans hold professional ties across major technology centers. This allows us to source top talent at highly competitive cost margins.",
+    desc: "Our veterans hold strong professional ties across major technology centers and industry verticals, sourcing top talent with high retention rates.",
     icon: (
       <>
         <circle cx="12" cy="12" r="10" />
@@ -138,6 +65,15 @@ const PILLARS = [
   },
 ];
 
+const COMPETENCIES = [
+  "Executive Headhunting",
+  "Permanent Recruitment",
+  "Contract Staffing",
+  "Workforce Planning",
+  "B2B Strategic Sourcing",
+  "Multi-Sector Placement",
+];
+
 export default function About() {
   return (
     <div className={styles.aboutPage}>
@@ -146,13 +82,13 @@ export default function About() {
         eyebrow="About Our Firm"
         title={
           <>
-            Connecting <span className="gradient-text">Talent</span> and Strategy
+            Empowering Growth Through <span className="gradient-text">Strategic Talent Acquisition</span>
           </>
         }
-        lede="SBHR Consultancy is a veteran-guided Next-Gen talent recruitment service provider nestled in the heart of Kolkata, West Bengal."
+        lede="SBHR Consultancy is a veteran-guided recruitment and human capital partner established in Kolkata, delivering elite talent across 12+ industry verticals Pan-India."
       />
 
-      {/* ── Story ────────────────────────────────────────── */}
+      {/* ── Company Story & Snapshot ─────────────────────── */}
       <section className="container" id="story">
         <div className={styles.twoCol}>
           <div className={styles.leftCol}>
@@ -161,36 +97,79 @@ export default function About() {
             </Reveal>
             <Reveal variant="left" delay={90}>
               <h2 className={styles.sectionTitle}>
-                A Young Organization Built on{" "}
-                <span className="gradient-text">Veteran Foundations</span>
+                Established in 2019, Driven by{" "}
+                <span className="gradient-text">Veteran Excellence</span>
               </h2>
             </Reveal>
             <Reveal variant="left" delay={170}>
               <p className={styles.text}>
-                Nestled in the cultural hub of Kolkata, SBHR Consultancy serves both large
-                enterprises and growing start-ups across all industry sectors. We combine
-                modern, intelligent technology with years of human resources experience to
-                help organizations convert human potential into business performance.
+                Founded in 2019 in the cultural and economic hub of Kolkata, SBHR Consultancy set out with a clear mission: to connect ambitious organizations with properly skilled human resources. Within a short span, we gathered the deep trust of clients and candidates alike through our solid database, pervasive culture, and unparallel work ethics.
               </p>
             </Reveal>
             <Reveal variant="left" delay={250}>
               <p className={styles.text}>
-                Our focus is selective. We don&apos;t believe in mass-emailing candidate lists;
-                we focus on finding the exact matches. By being selective, we invest productive
-                time in understanding your corporate culture, client roster, and engineering
-                budgets before presenting candidate options.
+                While our roots lie in specialized IT staffing, SBHR Consultancy has rapidly evolved into a trusted multi-sector recruitment partner. Today, we cater to 12+ major industry domains including Engineering, Financial Ecosystems, Healthcare, Supply Chain, Industrial Production, and Energy Infrastructure across India.
               </p>
             </Reveal>
           </div>
 
           <Reveal className={styles.vectorContainer} variant="scale" delay={140}>
-            <div className={styles.vectorGlass}>
-              <BridgeVector />
-              <span className={styles.vectorCaption}>Rooted in Kolkata · Sourcing nationwide</span>
+            <div className={styles.snapshotGrid}>
+              {SNAPSHOTS.map((s, i) => (
+                <div key={s.label} className={styles.snapshotCard} id={`snapshot-${i}`}>
+                  <span className={styles.snapshotNum}>{s.num}</span>
+                  <h3 className={styles.snapshotLabel}>{s.label}</h3>
+                  <p className={styles.snapshotDesc}>{s.desc}</p>
+                </div>
+              ))}
             </div>
           </Reveal>
         </div>
       </section>
+
+      {/* ── Co-Founder Executive Spotlight ─────────────────── */}
+      {/*<section className={styles.founderSection} id="leadership">*/}
+      {/*  <div className="container">*/}
+      {/*    <Reveal variant="up">*/}
+      {/*      <div className={styles.founderCard}>*/}
+      {/*        <div className={styles.founderHeaderBar}>*/}
+      {/*          <div className={styles.founderTitleGroup}>*/}
+      {/*            <span className={styles.founderRoleBadge}>Executive Leadership</span>*/}
+      {/*            <h3 className={styles.founderTitle}>Co-Founder Spotlight</h3>*/}
+      {/*          </div>*/}
+      {/*          <div className={styles.founderExpBadge}>*/}
+      {/*            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">*/}
+      {/*              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />*/}
+      {/*            </svg>*/}
+      {/*            25+ Years Experience*/}
+      {/*          </div>*/}
+      {/*        </div>*/}
+
+      {/*        <div className={styles.quoteBox}>*/}
+      {/*          <p className={styles.quoteText}>*/}
+      {/*            &ldquo;We believe that poor human resources can cause the downfall of even a very reputed company. Our commitment is delivering pre-vetted, domain-expert leaders and staff within 24 to 48 hours.&rdquo;*/}
+      {/*          </p>*/}
+      {/*        </div>*/}
+
+      {/*        <p className={styles.founderBio}>*/}
+      {/*          The mastermind guiding SBHR Consultancy brings over 25 years of extensive experience in the human resource department of top enterprise organizations. Throughout a distinguished career, our Co-Founder has focused on workforce management, employee engagement, B2B talent ecosystems, and executive headhunting. This widespread domain expertise guarantees that every client requirement is met with precision and speed.*/}
+      {/*        </p>*/}
+
+      {/*        <div className={styles.competenciesGroup}>*/}
+      {/*          <span className={styles.competenciesLabel}>Core Leadership Focus Areas</span>*/}
+      {/*          <div className={styles.pillsWrap}>*/}
+      {/*            {COMPETENCIES.map((c) => (*/}
+      {/*              <span key={c} className={styles.expertisePill}>*/}
+      {/*                <span className={styles.pillDot} aria-hidden="true" />*/}
+      {/*                {c}*/}
+      {/*              </span>*/}
+      {/*            ))}*/}
+      {/*          </div>*/}
+      {/*        </div>*/}
+      {/*      </div>*/}
+      {/*    </Reveal>*/}
+      {/*  </div>*/}
+      {/*</section>*/}
 
       {/* ── Mission & Vision ─────────────────────────────── */}
       <section className={`${styles.mvSection} aurora-host`} id="mission-vision">
@@ -208,9 +187,7 @@ export default function About() {
                 </span>
                 <h3 className={styles.mvCardTitle}>Our Mission</h3>
                 <p className={styles.mvCardDesc}>
-                  To be the premier one-stop recruitment service provider for employers,
-                  delivering immense value, expert suggestions, and vetted talent to help
-                  organizations achieve long-term success.
+                  To become the most trusted recruiting firm in the country by going the extra mile for our respected clients and candidates. We maintain sharp vigilance on client needs, prioritize quality, and utilize innovative methodologies to select domain potential talent.
                 </p>
               </article>
             </Reveal>
@@ -225,9 +202,7 @@ export default function About() {
                 </span>
                 <h3 className={styles.mvCardTitle}>Our Vision</h3>
                 <p className={styles.mvCardDesc}>
-                  To ensure our clients sit back and relax while we do the strategic
-                  headhunting, building a professional relationship where client happiness and
-                  organizational growth act as our primary success metrics.
+                  To emerge as one of the premier IT and multi-sector staffing companies Pan-India through utmost professionalism, deep recruitment expertise, and uncompromised commitment to organizational growth.
                 </p>
               </article>
             </Reveal>
@@ -244,8 +219,7 @@ export default function About() {
               The Three Pillars of <span className="gradient-text">SBHR Sourcing</span>
             </h2>
             <p className={styles.sectionLede}>
-              We guide our recruitment process using three fundamental parameters to ensure
-              high placement satisfaction rates.
+              We guide our recruitment process using three fundamental parameters to ensure high placement satisfaction rates.
             </p>
           </Reveal>
 

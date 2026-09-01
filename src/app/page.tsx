@@ -118,9 +118,9 @@ const KEY_FACTORS = [
   {
     id: "stat-speed",
     value: 24,
-    suffix: "h",
-    label: "CV Turnaround",
-    desc: "Average speed to present fully vetted candidate profiles.",
+    suffix: "–48h",
+    label: "Candidate Delivery SLA",
+    desc: "Average turnaround to present pre-vetted talent profiles aligned with client briefs.",
     icon: (
       <>
         <circle cx="12" cy="12" r="9" />
@@ -129,11 +129,37 @@ const KEY_FACTORS = [
     ),
   },
   {
-    id: "stat-expert",
-    value: 100,
-    suffix: "%",
-    label: "Multi-Domain Focus",
-    desc: "Tailored solutions across HR, CX, BPO, Consulting, and Global Workforce.",
+    id: "stat-established",
+    value: 2019,
+    suffix: "",
+    label: "Est. in Kolkata",
+    desc: "Established in 2019, rapidly expanding into a trusted recruiter across Pan-India.",
+    icon: (
+      <>
+        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+        <path d="M2 17l10 5 10-5" />
+        <path d="M2 12l10 5 10-5" />
+      </>
+    ),
+  },
+  {
+    id: "stat-experience",
+    value: 25,
+    suffix: "+ Yrs",
+    label: "Leadership Experience",
+    desc: "Guided by Co-Founder HR leadership with over two decades of staffing mastery.",
+    icon: (
+      <>
+        <path d="M12 2l2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.3 6.1 20.5l1.2-6.7L2.5 9.1l6.6-.9z" />
+      </>
+    ),
+  },
+  {
+    id: "stat-domains",
+    value: 12,
+    suffix: "+",
+    label: "Industry Verticals",
+    desc: "Cross-sector placement expertise spanning IT, Engineering, Finance, & Core sectors.",
     icon: (
       <>
         <rect x="3" y="3" width="7" height="7" />
@@ -143,32 +169,8 @@ const KEY_FACTORS = [
       </>
     ),
   },
-  {
-    id: "stat-match",
-    value: 98,
-    suffix: "%",
-    label: "Placement Match",
-    desc: "Of candidates pass probation and align with core company values.",
-    icon: (
-      <>
-        <circle cx="12" cy="12" r="9" />
-        <path d="M8 12.5l2.6 2.6L16 9.5" />
-      </>
-    ),
-  },
-  {
-    id: "stat-experience",
-    value: 10,
-    suffix: "+ Yr",
-    label: "Veteran Backbone",
-    desc: "Founded on veteran HR leadership and industry-trusted methodologies.",
-    icon: (
-      <>
-        <path d="M12 2l2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.3 6.1 20.5l1.2-6.7L2.5 9.1l6.6-.9z" />
-      </>
-    ),
-  },
 ];
+
 
 const DOMAINS = [
   /* ── Human Capital & Talent ──────── */
@@ -249,6 +251,142 @@ const DIFFERENTIATORS = [
     desc: "Harnessing local market leadership to source top-tier talent nationwide.",
   },
 ];
+
+const SECTORS = [
+  {
+    title: "IT & ITES",
+    desc: "Software engineering, cloud infrastructure, AI/ML, cybersecurity, and managed IT services.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+        <line x1="8" y1="21" x2="16" y2="21" />
+        <line x1="12" y1="17" x2="12" y2="21" />
+      </svg>
+    ),
+  },
+  {
+    title: "Engineering",
+    desc: "Core mechanical, civil, electrical, structural, and R&D engineering domain talent.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="3" />
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+      </svg>
+    ),
+  },
+  {
+    title: "Industrial Production",
+    desc: "Manufacturing leadership, plant operations, quality control, and industrial tech.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4H2v16z" />
+      </svg>
+    ),
+  },
+  {
+    title: "Financial Ecosystems",
+    desc: "Fintech, banking, capital markets, risk compliance, payments, and advisory.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <line x1="12" y1="1" x2="12" y2="23" />
+        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+      </svg>
+    ),
+  },
+  {
+    title: "Supply Chain",
+    desc: "Logistics management, procurement, warehouse ops, and supply chain alignment.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <rect x="1" y="3" width="15" height="13" />
+        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+        <circle cx="5.5" cy="18.5" r="2.5" />
+        <circle cx="18.5" cy="18.5" r="2.5" />
+      </svg>
+    ),
+  },
+  {
+    title: "Hospitality Services",
+    desc: "Hotel management, guest relations, corporate hospitality, and luxury service ops.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
+        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
+        <line x1="6" y1="1" x2="6" y2="4" />
+        <line x1="10" y1="1" x2="10" y2="4" />
+        <line x1="14" y1="1" x2="14" y2="4" />
+      </svg>
+    ),
+  },
+  {
+    title: "Energy Infrastructure",
+    desc: "Renewables, power generation, grid engineering, and sustainable energy projects.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+      </svg>
+    ),
+  },
+  {
+    title: "Education Systems",
+    desc: "EdTech innovators, institutional leaders, academic administration, and learning design.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+        <path d="M6 12v5c3 3 9 3 12 0v-5" />
+      </svg>
+    ),
+  },
+  {
+    title: "Urban Infrastructure",
+    desc: "Smart city engineering, commercial real estate, construction, and public works.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <rect x="4" y="2" width="16" height="20" rx="2" ry="2" />
+        <line x1="9" y1="6" x2="9" y2="6.01" />
+        <line x1="15" y1="6" x2="15" y2="6.01" />
+        <line x1="9" y1="10" x2="9" y2="10.01" />
+        <line x1="15" y1="10" x2="15" y2="10.01" />
+        <line x1="9" y1="14" x2="9" y2="14.01" />
+        <line x1="15" y1="14" x2="15" y2="14.01" />
+        <line x1="9" y1="18" x2="15" y2="18" />
+      </svg>
+    ),
+  },
+  {
+    title: "Creative Media",
+    desc: "Digital media, advertising design, content production, brand management, & entertainment.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <polygon points="23 7 16 12 23 17 23 7" />
+        <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+      </svg>
+    ),
+  },
+  {
+    title: "Life Sciences",
+    desc: "Pharmaceuticals, biotech R&D, clinical trial management, and healthcare administration.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M10 2v7.31a2 2 0 0 1-.29.99L4.14 19.4A2 2 0 0 0 5.86 22h12.28a2 2 0 0 0 1.72-2.6l-5.57-9.1a2 2 0 0 1-.29-.99V2" />
+        <line x1="8" y1="2" x2="16" y2="2" />
+        <line x1="8.5" y1="14" x2="15.5" y2="14" />
+      </svg>
+    ),
+  },
+  {
+    title: "Retail & E-Commerce",
+    desc: "Omnichannel retail leadership, e-commerce ops, merchandising, and customer growth.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <path d="M16 10a4 4 0 0 1-8 0" />
+      </svg>
+    ),
+  },
+];
+
 
 const SERVICES = [
   {
@@ -444,8 +582,38 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Industry Sectors Grid ─────────────────────────── */}
+      <section className={styles.sectorsSection} id="sectors-grid-section">
+        <div className="container">
+          <Reveal className={styles.sectionHead} variant="up">
+            <span className="eyebrow-pill">Expanded Capability</span>
+            <h2 className={styles.sectionTitle}>
+              Industry Sectors & <span className="gradient-text">Domain Expertise</span>
+            </h2>
+            <p className={styles.sectionLede}>
+              From our core IT recruiting foundation, SBHR Consultancy has expanded across 12+ vital economic sectors, placing top-tier talent in specialized domain functions nationwide.
+            </p>
+          </Reveal>
+
+          <div className={styles.sectorsGrid}>
+            {SECTORS.map((sector, i) => (
+              <Reveal key={sector.title} variant="up" delay={i * 65}>
+                <TiltCard className={styles.sectorTilt} id={`sector-${sector.title.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}>
+                  <article className={`${styles.sectorCard} glow-border`}>
+                    <span className={styles.sectorIcon}>{sector.icon}</span>
+                    <h3 className={styles.sectorTitle}>{sector.title}</h3>
+                    <p className={styles.sectorDesc}>{sector.desc}</p>
+                  </article>
+                </TiltCard>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Services ─────────────────────────────────────── */}
       <section className={`${styles.servicesSection} aurora-host`} id="services-summary-section">
+
         <Aurora variant="warm" />
         <div className="container">
           <Reveal className={styles.sectionHead} variant="up">

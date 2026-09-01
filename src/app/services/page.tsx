@@ -17,8 +17,8 @@ const PILLARS = [
     tag: "01",
     href: "/services/human-capital",
     title: "Human Capital & Talent Solutions",
-    desc: "We enable organisations to build agile, high-performing teams that are aligned with strategic business objectives — from permanent hiring and executive search to RPO and talent advisory.",
-    highlights: ["Permanent Recruitment", "Executive Search", "Contract Staffing", "RPO & Workforce Solutions"],
+    desc: "We enable organisations to build agile, high-performing teams that are aligned with strategic business objectives — from permanent hiring and executive search to contract staffing, training, and resume writing.",
+    highlights: ["Permanent Recruitment", "Contract Staffing", "Headhunting & Executive Search", "Resume Writing & Training"],
     icon: (
       <>
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
@@ -205,8 +205,8 @@ export default function Services() {
                     <path d="M12 2l2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.3 6.1 20.5l1.2-6.7L2.5 9.1l6.6-.9z" />
                   </>
                 ),
-                title: "10+ Years of Veteran Expertise",
-                desc: "Our leadership brings deep domain knowledge across HR, CX, BPO, and technology sectors — ensuring you receive informed, battle-tested guidance.",
+                title: "25+ Years of Leadership Expertise",
+                desc: "Our Co-Founder brings deep domain knowledge across HR, IT staffing, workforce management, and enterprise talent solutions.",
               },
               {
                 id: "why-integrated",
@@ -229,8 +229,8 @@ export default function Services() {
                     <polyline points="12 7 12 12 15.5 14" />
                   </>
                 ),
-                title: "Speed Without Compromise",
-                desc: "Our proven delivery model ensures 24-hour CV turnaround for hiring and rapid deployment timelines for process and CX engagements.",
+                title: "24-48 Hour Candidate SLA",
+                desc: "Our pre-vetted candidate database enables our recruiters to share verified candidate profiles within 24 to 48 hours of client brief alignment.",
               },
               {
                 id: "why-custom",
@@ -238,7 +238,7 @@ export default function Services() {
                   <>
                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
                     <line x1="3" y1="9" x2="21" y2="9" />
-                    <line x1="9" y1="21" x2="9" y2="9" />
+                    <line x1="9" y1="21" x2="9.01" y2="9" />
                   </>
                 ),
                 title: "Bespoke, Not Templated",

@@ -3,7 +3,9 @@
 import React, { useEffect, useState } from "react";
 import PageHero from "../../components/PageHero";
 import Reveal from "../../components/Reveal";
+import CustomSelect from "../../components/CustomSelect";
 import styles from "./jobs.module.css";
+
 
 export interface JobOpening {
   id: string;
@@ -199,39 +201,39 @@ export default function JobsClient({ jobs }: JobsClientProps) {
                 <label htmlFor="dept-select" className={styles.filterLabel}>
                   Department
                 </label>
-                <select
+                <CustomSelect
                   id="dept-select"
                   value={deptFilter}
-                  onChange={(e) => {
-                    setDeptFilter(e.target.value);
-                    setExpandedJobId(null); // Reset expanded card when filters change
+                  options={[
+                    { value: "All", label: "All Departments" },
+                    { value: "Engineering", label: "Engineering" },
+                    { value: "Design", label: "Design" },
+                    { value: "Operations", label: "Operations" },
+                  ]}
+                  onChange={(val) => {
+                    setDeptFilter(val);
+                    setExpandedJobId(null);
                   }}
-                  className={styles.select}
-                >
-                  <option value="All">All Departments</option>
-                  <option value="Engineering">Engineering</option>
-                  <option value="Design">Design</option>
-                  <option value="Operations">Operations</option>
-                </select>
+                />
               </div>
 
               <div className={styles.filterField}>
                 <label htmlFor="type-select" className={styles.filterLabel}>
                   Job Type
                 </label>
-                <select
+                <CustomSelect
                   id="type-select"
                   value={typeFilter}
-                  onChange={(e) => {
-                    setTypeFilter(e.target.value);
-                    setExpandedJobId(null); // Reset expanded card when filters change
+                  options={[
+                    { value: "All", label: "All Job Types" },
+                    { value: "Full-Time", label: "Full-Time" },
+                    { value: "Contract", label: "Contract" },
+                  ]}
+                  onChange={(val) => {
+                    setTypeFilter(val);
+                    setExpandedJobId(null);
                   }}
-                  className={styles.select}
-                >
-                  <option value="All">All Job Types</option>
-                  <option value="Full-Time">Full-Time</option>
-                  <option value="Contract">Contract</option>
-                </select>
+                />
               </div>
             </div>
 

@@ -18,17 +18,17 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "SBHR Consultancy | Full Spectrum Human Capital & Executive Recruitment",
+  title: "SBHR Consultancy | Premier IT & Multi-Sector Staffing Agency Kolkata",
   description:
-    "SBHR Consultancy is a premier human capital & executive recruitment partner connecting top-tier talent with high-growth enterprises across India.",
+    "SBHR Consultancy is a leading recruitment and staffing agency established in 2019 in Kolkata. Specializing in IT, Engineering, Finance, Energy, and 12+ industry sectors with a 24–48 hour talent delivery SLA.",
   keywords:
-    "Human Capital, Executive Recruitment, Talent Acquisition, HR Consultancy, Permanent Staffing, Contract Staffing, GCC Setup, Kolkata",
+    "IT Staffing Kolkata, Recruitment Agency Kolkata, Permanent Recruitment, Contract Staffing, Executive Search, Multi-Domain Staffing India, Resume Writing Services, SBHR Consultancy",
   authors: [{ name: "SBHR Consultancy" }],
   icons: { icon: "/Logo.svg" },
   openGraph: {
-    title: "SBHR Consultancy | Full Spectrum Human Capital & Executive Recruitment",
+    title: "SBHR Consultancy | Premier IT & Multi-Sector Staffing Agency Kolkata",
     description:
-      "Veteran-guided human capital solutions and executive recruitment. Vetted candidate talent delivered within 24 hours.",
+      "Veteran-guided recruitment solutions across 12+ industry domains. Pre-vetted candidate profiles delivered within 24–48 hours.",
     siteName: "SBHR Consultancy",
     locale: "en_IN",
     type: "website",

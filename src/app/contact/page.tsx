@@ -3,7 +3,9 @@
 import React, { useState } from "react";
 import PageHero from "../../components/PageHero";
 import Reveal from "../../components/Reveal";
+import CustomSelect from "../../components/CustomSelect";
 import styles from "./contact.module.css";
+
 
 interface FormData {
   name: string;
@@ -176,17 +178,16 @@ export default function Contact() {
                   <label htmlFor="inquiryType" className={styles.label}>
                     Inquiry Type
                   </label>
-                  <select
+                  <CustomSelect
                     id="inquiryType"
-                    name="inquiryType"
                     value={formData.inquiryType}
-                    onChange={handleChange}
-                    className={styles.select}
-                  >
-                    <option value="Hiring Talent">Looking to Hire Talent</option>
-                    <option value="Looking for Job">Looking for Job Opportunities</option>
-                    <option value="General Inquiry">General Business Inquiry</option>
-                  </select>
+                    options={[
+                      { value: "Hiring Talent", label: "Looking to Hire Talent" },
+                      { value: "Looking for Job", label: "Looking for Job Opportunities" },
+                      { value: "General Inquiry", label: "General Business Inquiry" },
+                    ]}
+                    onChange={(val) => setFormData((prev) => ({ ...prev, inquiryType: val }))}
+                  />
                 </div>
 
                 <div className={styles.formGroup}>
