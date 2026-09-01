@@ -1,0 +1,9 @@
+{
+  "id": "it-ites-cloud-architect",
+  "title": "Lead Cloud Infrastructure & DevOps Architect",
+  "department": "IT & ITES",
+  "type": "Full-Time",
+  "location": "Kolkata",
+  "description": "Architect enterprise cloud infrastructure across AWS/Azure, automated CI/CD pipelines, Kubernetes microservices, and cybersecurity controls.",
+  "details": "### Role Overview\nJoin an enterprise technology team as a Lead Cloud Architect driving multi-cloud migration, Infrastructure-as-Code (Terraform), and high-availability microservices.\n\n### Key Responsibilities\n- Design resilient cloud architectures on AWS/Azure utilizing Terraform, Docker, and Kubernetes (EKS/AKS).\n- Establish Site Reliability Engineering (SRE) practices, automated CI/CD pipelines, and Zero-Trust cybersecurity controls.\n- Mentor engineering teams, lead architectural reviews, and optimize cloud infrastructure costs.\n\n### Requirements\n- Bachelor’s degree in Computer Science, Information Technology, or equivalent.\n- AWS Certified Solutions Architect or Azure Solutions Architect Expert.\n- 7+ years in IT infrastructure engineering, DevOps automation, and cloud architecture."
+}

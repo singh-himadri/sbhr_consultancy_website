@@ -254,7 +254,7 @@ export default function Contact() {
                   </span>
                   <span>
                     <span className={styles.infoLabel}>Office Address</span>
-                    <span className={styles.infoValue}>Kolkata, West Bengal, India</span>
+                    <span className={styles.infoValue}>59/11 Jorabagan Road <br/> Kolkata, West Bengal, India</span>
                   </span>
                 </li>
 

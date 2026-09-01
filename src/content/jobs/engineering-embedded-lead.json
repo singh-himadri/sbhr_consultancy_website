@@ -1,0 +1,9 @@
+{
+  "id": "engineering-embedded-lead",
+  "title": "Senior Embedded Systems & Mechatronics Engineer",
+  "department": "Engineering",
+  "type": "Full-Time",
+  "location": "Bengaluru",
+  "description": "Design core embedded hardware, firmware systems, mechatronics control units, and industrial IoT solutions for automotive & industrial products.",
+  "details": "### Role Overview\nSeeking an experienced Embedded Systems Engineer to design microcontroller hardware, RTOS firmware, and industrial mechatronics systems.\n\n### Key Responsibilities\n- Design embedded hardware schematics, PCB layouts, and C/C++ firmware for microcontrollers (ARM, STM32).\n- Implement industrial communication protocols (CAN bus, Modbus, MQTT, SPI/I2C).\n- Conduct hardware-in-the-loop (HIL) testing, thermal analysis, and EMI/EMC compliance validation.\n\n### Requirements\n- B.Tech / M.Tech in Electrical, Electronics, or Mechatronics Engineering.\n- 5+ years of experience in embedded firmware, RTOS, and mechatronic hardware design."
+}

@@ -206,9 +206,10 @@ export default function JobsClient({ jobs }: JobsClientProps) {
                   value={deptFilter}
                   options={[
                     { value: "All", label: "All Departments" },
-                    { value: "Engineering", label: "Engineering" },
-                    { value: "Design", label: "Design" },
-                    { value: "Operations", label: "Operations" },
+                    ...Array.from(new Set(jobs.map((j) => j.department)))
+                      .filter(Boolean)
+                      .sort()
+                      .map((dept) => ({ value: dept, label: dept })),
                   ]}
                   onChange={(val) => {
                     setDeptFilter(val);

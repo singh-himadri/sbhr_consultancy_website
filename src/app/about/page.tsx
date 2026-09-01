@@ -25,7 +25,7 @@ const SNAPSHOTS = [
   {
     num: "12+",
     label: "Industry Domains",
-    desc: "Cross-sector placement expertise across IT, Engineering, Manufacturing, Finance, & Core sectors.",
+    desc: "Cross-sector placement expertise across IT, Engineering, Manufacturing, Finance & Core sectors.",
   },
 ];
 
