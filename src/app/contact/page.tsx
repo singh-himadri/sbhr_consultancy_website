@@ -268,11 +268,11 @@ export default function Contact() {
                   <span>
                     <span className={styles.infoLabel}>Email Inquiries</span>
                     <a
-                      href="mailto:info@sbhrconsultancy.in"
+                      href="mailto:hr@sbhrconsultancy.in"
                       className={`${styles.infoValue} ${styles.infoLink}`}
                       id="info-email-link"
                     >
-                      info@sbhrconsultancy.in
+                      hr@sbhrconsultancy.in
                     </a>
                   </span>
                 </li>
@@ -285,8 +285,8 @@ export default function Contact() {
                   </span>
                   <span>
                     <span className={styles.infoLabel}>Call Support</span>
-                    <a href="tel:+913312345678" className={`${styles.infoValue} ${styles.infoLink}`} id="info-phone-link">
-                      +91 (033) 1234-5678
+                    <a href="tel:+919433125399" className={`${styles.infoValue} ${styles.infoLink}`} id="info-phone-link">
+                      +91 9433125399
                     </a>
                   </span>
                 </li>
