@@ -47,7 +47,7 @@ export default function Footer() {
           </Link>
 
           <p className={styles.description}>
-            Empowering organizations through smart technology and veteran-guided IT staffing.
+            Empowering organizations through strategic human capital solutions and veteran-guided talent acquisition.
             We deliver candidate matches within 24 hours.
           </p>
 

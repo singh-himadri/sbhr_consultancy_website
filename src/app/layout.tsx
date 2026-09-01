@@ -18,17 +18,17 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "SBHR Consultancy | Full Spectrum IT Staffing & Recruitment",
+  title: "SBHR Consultancy | Full Spectrum Human Capital & Executive Recruitment",
   description:
-    "SBHR Consultancy is a premier IT staffing & executive recruitment partner connecting top-tier engineering talent with high-growth enterprises across India.",
+    "SBHR Consultancy is a premier human capital & executive recruitment partner connecting top-tier talent with high-growth enterprises across India.",
   keywords:
-    "IT Staffing, Executive Recruitment, Tech Hiring, HR Consultancy, Permanent Staffing, Contract Staffing, GCC Setup, Kolkata",
+    "Human Capital, Executive Recruitment, Talent Acquisition, HR Consultancy, Permanent Staffing, Contract Staffing, GCC Setup, Kolkata",
   authors: [{ name: "SBHR Consultancy" }],
   icons: { icon: "/Logo.svg" },
   openGraph: {
-    title: "SBHR Consultancy | Full Spectrum IT Staffing & Recruitment",
+    title: "SBHR Consultancy | Full Spectrum Human Capital & Executive Recruitment",
     description:
-      "Veteran-guided IT staffing and executive recruitment. Vetted engineering talent delivered within 24 hours.",
+      "Veteran-guided human capital solutions and executive recruitment. Vetted candidate talent delivered within 24 hours.",
     siteName: "SBHR Consultancy",
     locale: "en_IN",
     type: "website",

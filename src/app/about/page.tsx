@@ -120,7 +120,7 @@ const PILLARS = [
     id: "pillar-speed",
     index: "02",
     title: "Real-Time Delivery",
-    desc: "We run a pre-vetted database of IT engineering talent. This enables our recruiters to share fully verified candidate profiles within 24 hours of brief alignment.",
+    desc: "We run a pre-vetted database of top-tier talent. This enables our recruiters to share fully verified candidate profiles within 24 hours of brief alignment.",
     icon: <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />,
   },
   {
@@ -283,8 +283,8 @@ export default function About() {
       <CtaBanner
         sectionId="about-cta"
         eyebrow="Start the conversation"
-        title="Build Your Core Engineering Team With Us"
-        desc="Connect with our Kolkata consultants to align your IT staffing roadmap today."
+        title="Build Your Core Talent Ecosystem With Us"
+        desc="Connect with our Kolkata consultants to align your human capital roadmap today."
         primary={{ href: "/contact", label: "Talk to Our Consultants", id: "about-cta-contact-btn" }}
         secondary={{ href: "/services", label: "Explore Our Models", id: "about-cta-services-btn" }}
       />

@@ -164,7 +164,7 @@ export default function HeroSection() {
   return (
     <section
       className={`${styles.heroOuter} aurora-host`}
-      aria-label="SBHR Consultancy — IT Staffing & Executive Recruitment"
+      aria-label="SBHR Consultancy — Human Capital & Executive Recruitment"
     >
       <Aurora variant="light" />
 
@@ -173,7 +173,7 @@ export default function HeroSection() {
           {/* ── Copy ─────────────────────────────────────── */}
           <div className={styles.heroContent}>
             <span className={`eyebrow-pill ${styles.eyebrow}`}>
-              IT staffing &amp; executive recruitment
+              Human capital &amp; executive recruitment
             </span>
 
             <h1 className={styles.headline}>
@@ -190,9 +190,9 @@ export default function HeroSection() {
             </h1>
 
             <p className={styles.sub}>
-              Your whole-of-talent digital partner — connecting India&apos;s top engineers,
-              architects &amp; IT leaders with leading organisations through permanent,
-              contract &amp; offshore GCC staffing.
+              Your whole-of-talent partner — connecting India&apos;s top professionals,
+              industry leaders &amp; domain experts with leading organisations through permanent,
+              contract &amp; global workforce solutions.
             </p>
 
             <div className={styles.ctas}>

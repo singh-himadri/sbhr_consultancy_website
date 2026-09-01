@@ -501,8 +501,8 @@ export default function Home() {
       <CtaBanner
         sectionId="cta-banner-section"
         eyebrow="Let's build your team"
-        title="Ready to Accelerate Your Tech Team Scaling?"
-        desc="Join hands with SBHR Consultancy and let our recruiters source, verify, and align the elite IT specialists you need."
+        title="Ready to Accelerate Your Organisation's Talent Scaling?"
+        desc="Join hands with SBHR Consultancy and let our recruiters source, verify, and align the elite talent you need."
         primary={{ href: "/contact", label: "Request Consultancy", id: "cta-banner-btn-hire" }}
         secondary={{ href: "/jobs", label: "Browse Open Jobs", id: "cta-banner-btn-jobs" }}
       />

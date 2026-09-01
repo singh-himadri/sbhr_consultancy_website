@@ -184,7 +184,7 @@ export default function Contact() {
                     className={styles.select}
                   >
                     <option value="Hiring Talent">Looking to Hire Talent</option>
-                    <option value="Looking for Job">Looking for an IT Job</option>
+                    <option value="Looking for Job">Looking for Job Opportunities</option>
                     <option value="General Inquiry">General Business Inquiry</option>
                   </select>
                 </div>
