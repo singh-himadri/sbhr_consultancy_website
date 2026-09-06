@@ -181,7 +181,7 @@
   display: flex;
   width: max-content;
   gap: 1.1rem;
-  animation: marqueeRTL 120s linear infinite;
+  animation: marqueeRTL 250s linear infinite;
 }
 
 .marquee:hover .marqueeTrack { animation-play-state: paused; }
@@ -504,7 +504,7 @@
 
   .sectionHead { margin-bottom: 2.25rem; }
 
-  .marqueeTrack { animation-duration: 160s; }
+  .marqueeTrack { animation-duration: 300s; }
 }
 
 /* ═══════════════════════════════════════════════════════════

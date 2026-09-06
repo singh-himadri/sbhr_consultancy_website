@@ -495,7 +495,7 @@ export default function JobsClient({ jobs }: JobsClientProps) {
                     value={applyForm.name}
                     onChange={handleApplyChange}
                     className={`${styles.input} ${applyErrors.name ? styles.inputError : ""}`}
-                    placeholder="e.g. Joydeep Sen"
+                    placeholder="e.g. John Doe"
                     required
                   />
                   {applyErrors.name && (
@@ -514,7 +514,7 @@ export default function JobsClient({ jobs }: JobsClientProps) {
                     value={applyForm.email}
                     onChange={handleApplyChange}
                     className={`${styles.input} ${applyErrors.email ? styles.inputError : ""}`}
-                    placeholder="e.g. joydeep@gmail.com"
+                    placeholder="e.g. john.doe@gmail.com"
                     required
                   />
                   {applyErrors.email && (

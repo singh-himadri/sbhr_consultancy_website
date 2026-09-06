@@ -127,13 +127,6 @@ export default function Footer() {
           </ul>
         </div>
       </div>
-
-      <div className={`container ${styles.bottom}`}>
-        <p className={styles.copyright}>
-          &copy; {currentYear} SBHR Consultancy Pvt Ltd. All rights reserved.
-        </p>
-        <p className={styles.tagline}>Designed for minimal excellence.</p>
-      </div>
     </footer>
   );
 }
