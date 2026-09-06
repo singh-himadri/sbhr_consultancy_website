@@ -75,13 +75,13 @@ const PILLARS = [
     ),
   },
   {
-    id: "pillar-global-workforce",
-    linkId: "link-global-workforce",
+    id: "pillar-pan-india-workforce",
+    linkId: "link-pan-india-workforce",
     tag: "05",
-    href: "/services/global-workforce",
-    title: "Global Workforce & Employment Solutions",
-    desc: "We enable organisations to expand globally with ease by managing employment contracts, compliance, and workforce administration seamlessly across geographies.",
-    highlights: ["Employer of Record", "Global Payroll", "Multi-Country Staffing", "Cross-Border Compliance"],
+    href: "/services/pan-india-workforce",
+    title: "Pan-India Workforce & Employment Solutions",
+    desc: "We enable organisations to scale across India with ease by managing employment contracts, compliance, and multi-state workforce administration seamlessly.",
+    highlights: ["Employer of Record (EOR)", "Pan-India Payroll", "Multi-State Staffing", "Statutory Compliance"],
     icon: (
       <>
         <circle cx="12" cy="12" r="10" />
@@ -103,7 +103,7 @@ export default function Services() {
             End-to-End <span className="gradient-text">Business Solutions</span> That Drive Growth
           </>
         }
-        lede="SBHR Consultancy delivers five integrated service pillars — from talent acquisition and customer experience design to global workforce management and strategic consulting — all built on veteran-led expertise."
+        lede="SBHR Consultancy delivers five integrated service pillars — from talent acquisition and customer experience design to pan-India workforce management and strategic consulting — all built on veteran-led expertise."
       />
 
       {/* ── Service Pillars Grid ──────────────────────────── */}
@@ -219,7 +219,7 @@ export default function Services() {
                   </>
                 ),
                 title: "Integrated Multi-Service Delivery",
-                desc: "Combine services across pillars for seamless outcomes — hire talent, optimise their workflows, and manage global compliance all through one relationship.",
+                desc: "Combine services across pillars for seamless outcomes — hire talent, optimise their workflows, and manage multi-state compliance all through one relationship.",
               },
               {
                 id: "why-speed",

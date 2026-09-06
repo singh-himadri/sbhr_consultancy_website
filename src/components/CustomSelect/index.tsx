@@ -81,7 +81,7 @@ export default function CustomSelect({
   return (
     <div
       ref={containerRef}
-      className={`${styles.selectWrapper} ${className}`}
+      className={`${styles.selectWrapper} ${isOpen ? styles.selectWrapperOpen : ""} ${className}`}
       id={id ? `${id}-wrapper` : undefined}
     >
       <div

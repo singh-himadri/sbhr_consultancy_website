@@ -18,8 +18,8 @@ collections:
     fields:
       - {label: "ID (unique slug, e.g. senior-dev)", name: "id", widget: "string"}
       - {label: "Title", name: "title", widget: "string"}
-      - {label: "Department", name: "department", widget: "select", options: ["Engineering", "Design", "Operations"]}
-      - {label: "Job Type", name: "type", widget: "select", options: ["Full-Time", "Contract"]}
+      - {label: "Department", name: "department", widget: "select", options: ["Creative Media", "Education Systems", "Energy Infrastructure", "Engineering", "Financial Ecosystems", "Hospitality Services", "Industrial Production", "IT & ITES", "Life Sciences", "Retail & E-Commerce", "Supply Chain", "Urban Infrastructure", "Design", "Operations"]}
+      - {label: "Job Type", name: "type", widget: "select", options: ["Full-Time", "Contract", "Part-Time", "Remote", "Internship"]}
       - {label: "Location", name: "location", widget: "string"}
       - {label: "Short Description (Card view)", name: "description", widget: "text"}
       - {label: "Full Details (Markdown details)", name: "details", widget: "markdown"}

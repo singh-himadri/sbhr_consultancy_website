@@ -18,7 +18,7 @@ const SERVICE_LINKS = [
   { label: "Contact Centre & CX", href: "/services/contact-centre", id: "footer-link-contact-centre" },
   { label: "Business Process & Ops", href: "/services/business-process", id: "footer-link-business-process" },
   { label: "Consulting & Advisory", href: "/services/consulting-advisory", id: "footer-link-consulting" },
-  { label: "Global Workforce", href: "/services/global-workforce", id: "footer-link-global-workforce" },
+  { label: "Pan-India Workforce", href: "/services/pan-india-workforce", id: "footer-link-pan-india-workforce" },
 ];
 
 export default function Footer() {

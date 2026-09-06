@@ -12,7 +12,7 @@ const SERVICE_LINKS = [
   { label: "Contact Centre & CX", href: "/services/contact-centre", id: "nav-svc-cx" },
   { label: "Business Process & Ops", href: "/services/business-process", id: "nav-svc-bpo" },
   { label: "Consulting & Advisory", href: "/services/consulting-advisory", id: "nav-svc-ca" },
-  { label: "Global Workforce", href: "/services/global-workforce", id: "nav-svc-gw" },
+  { label: "Pan-India Workforce", href: "/services/pan-india-workforce", id: "nav-svc-piw" },
 ];
 
 const navItems = [

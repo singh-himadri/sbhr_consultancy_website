@@ -193,7 +193,7 @@ export default function JobsClient({ jobs }: JobsClientProps) {
       />
 
       {/* ── Filters ──────────────────────────────────────── */}
-      <section className="container" id="jobs-filter-section">
+      <section className={`${styles.filterSection} container`} id="jobs-filter-section">
         <Reveal variant="fade">
           <div className={styles.filterBar}>
             <div className={styles.filterGroup}>
@@ -227,8 +227,10 @@ export default function JobsClient({ jobs }: JobsClientProps) {
                   value={typeFilter}
                   options={[
                     { value: "All", label: "All Job Types" },
-                    { value: "Full-Time", label: "Full-Time" },
-                    { value: "Contract", label: "Contract" },
+                    ...Array.from(new Set(jobs.map((j) => j.type)))
+                      .filter(Boolean)
+                      .sort()
+                      .map((type) => ({ value: type, label: type })),
                   ]}
                   onChange={(val) => {
                     setTypeFilter(val);

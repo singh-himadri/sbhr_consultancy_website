@@ -192,7 +192,7 @@ export default function HeroSection() {
             <p className={styles.sub}>
               Your whole-of-talent partner — connecting India&apos;s top professionals,
               industry leaders &amp; domain experts with leading organisations through permanent,
-              contract &amp; global workforce solutions.
+              contract &amp; pan-India workforce solutions.
             </p>
 
             <div className={styles.ctas}>
