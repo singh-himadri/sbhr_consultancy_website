@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   keywords:
     "IT Staffing Kolkata, Recruitment Agency Kolkata, Permanent Recruitment, Contract Staffing, Executive Search, Multi-Domain Staffing India, Resume Writing Services, SBHR Consultancy",
   authors: [{ name: "SBHR Consultancy" }],
-  icons: { icon: "/sbhr_consultancy_website/Logo.svg" },
+  icons: { icon: "/Logo.svg" },
   openGraph: {
     title: "SBHR Consultancy | Premier IT & Multi-Sector Staffing Agency Kolkata",
     description:
