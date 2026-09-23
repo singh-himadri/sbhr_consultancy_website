@@ -15,6 +15,7 @@ export interface JobOpening {
   location: string;
   description: string;
   details?: string;
+  status?: "listed" | "unlisted";
 }
 
 interface ApplyForm {
@@ -99,11 +100,15 @@ export default function JobsClient({ jobs }: JobsClientProps) {
   const [applyErrors, setApplyErrors] = useState<ApplyErrors>({});
   const [applySuccess, setApplySuccess] = useState(false);
 
-  const filteredJobs = jobs.filter((job) => {
+  // Filter out unlisted jobs from public view
+  const publicJobs = jobs.filter((job) => job.status !== "unlisted");
+
+  const filteredJobs = publicJobs.filter((job) => {
     const matchesDept = deptFilter === "All" || job.department === deptFilter;
     const matchesType = typeFilter === "All" || job.type === typeFilter;
     return matchesDept && matchesType;
   });
+
 
   const toggleExpand = (jobId: string) => {
     setExpandedJobId(expandedJobId === jobId ? null : jobId);
