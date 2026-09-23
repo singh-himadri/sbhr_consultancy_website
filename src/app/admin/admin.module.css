@@ -438,6 +438,48 @@
   border: 1px solid #fde68a;
 }
 
+.badgePendingDelete {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  font-weight: 700;
+}
+
+.rowPendingDelete {
+  background-color: #fef2f2 !important;
+}
+
+.rowPendingDelete:hover td {
+  background-color: #fee2e2 !important;
+}
+
+.titlePendingDelete {
+  text-decoration: line-through;
+  color: #9f1239;
+}
+
+.btnUndo {
+  padding: 6px 14px;
+  background: #ffffff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  font-size: 0.825rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btnUndo:hover {
+  background: #eff6ff;
+  border-color: #2563eb;
+  color: #1d4ed8;
+}
+
 .btnWarning {
   padding: 6px 12px;
   background: #fffbeb;

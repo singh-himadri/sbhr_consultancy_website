@@ -293,27 +293,39 @@ export default function AdminClient({ initialJobs }: AdminClientProps) {
     setConfirmState({
       isOpen: true,
       title: "Queue Job for Deletion",
-      message: `Are you sure you want to queue "${job.title}" for deletion? This change will be committed when you click "Commit Changes".`,
+      message: `Are you sure you want to mark "${job.title}" for deletion? It will remain visible as "Pending Delete" until you click "Commit Changes".`,
       confirmText: "Queue Deletion",
       variant: "danger",
       onConfirm: () => executeDeleteJobDraft(job),
     });
   };
 
-  // Local Draft: Execute Delete job locally
+  // Local Draft: Execute Delete job locally (keeps row in table with pending delete indicator)
   const executeDeleteJobDraft = (job: JobOpening) => {
     setConfirmState((prev) => ({ ...prev, isOpen: false }));
 
-    // Remove from local jobs list
-    setJobs((prev) => prev.filter((j) => j.id !== job.id));
-
-    // Queue for GitHub Deletion Commit
+    // Queue for GitHub Deletion Commit (job stays in local state for undo capability)
     setPendingChanges((prev) => ({
       ...prev,
       [job.id]: { type: "delete", job },
     }));
 
-    showToast(`Draft: "${job.title}" queued for deletion. Click "Commit Changes" to publish.`, "info");
+    showToast(`Draft: "${job.title}" marked for deletion. Click "Commit Changes" to publish.`, "info");
+  };
+
+  // Local Draft: Undo pending deletion
+  const handleUndoDelete = (job: JobOpening) => {
+    setPendingChanges((prev) => {
+      const copy = { ...prev };
+      if (!fileShas[job.id]) {
+        // If job was created locally in this session and not yet on GitHub, restore to pending save
+        copy[job.id] = { type: "save", job };
+      } else {
+        delete copy[job.id];
+      }
+      return copy;
+    });
+    showToast(`Restored "${job.title}". Deletion cancelled.`, "info");
   };
 
   // BATCH COMMIT: Push all pending draft changes to GitHub in 1 SINGLE ATOMIC COMMIT
@@ -368,25 +380,33 @@ export default function AdminClient({ initialJobs }: AdminClientProps) {
       const baseTreeSha = commitData.tree.sha;
 
       // 3. Build Git tree array payload for all modified/deleted jobs
-      const treeItems = pendingList.map((action) => {
-        const path = `src/content/jobs/${action.job.id}.json`;
-        if (action.type === "save") {
-          return {
-            path,
-            mode: "100644",
-            type: "blob",
-            content: JSON.stringify(action.job, null, 2),
-          };
-        } else {
-          // Deleting file: setting sha to null removes it from Git tree
-          return {
-            path,
-            mode: "100644",
-            type: "blob",
-            sha: null,
-          };
-        }
-      });
+      const treeItems = pendingList
+        .filter((action) => {
+          // If action is delete and file never existed on GitHub, skip GitHub tree deletion
+          if (action.type === "delete" && !fileShas[action.job.id]) {
+            return false;
+          }
+          return true;
+        })
+        .map((action) => {
+          const path = `src/content/jobs/${action.job.id}.json`;
+          if (action.type === "save") {
+            return {
+              path,
+              mode: "100644",
+              type: "blob",
+              content: JSON.stringify(action.job, null, 2),
+            };
+          } else {
+            // Deleting file: setting sha to null removes it from Git tree
+            return {
+              path,
+              mode: "100644",
+              type: "blob",
+              sha: null,
+            };
+          }
+        });
 
       // 4. Create new Git Tree
       const createTreeRes = await fetch(
@@ -612,20 +632,41 @@ export default function AdminClient({ initialJobs }: AdminClientProps) {
               {jobs.length > 0 ? (
                 jobs.map((job) => {
                   const isUnlisted = job.status === "unlisted";
-                  const hasPending = Boolean(pendingChanges[job.id]);
+                  const pendingAction = pendingChanges[job.id];
+                  const isPendingDelete = pendingAction?.type === "delete";
+                  const isPendingSave = pendingAction?.type === "save";
+
                   return (
-                    <tr key={job.id} style={hasPending ? { backgroundColor: "#fefce8" } : undefined}>
+                    <tr
+                      key={job.id}
+                      className={isPendingDelete ? styles.rowPendingDelete : undefined}
+                      style={!isPendingDelete && isPendingSave ? { backgroundColor: "#fefce8" } : undefined}
+                    >
                       <td>
-                        <div className={styles.jobTitleCell}>
+                        <div className={`${styles.jobTitleCell} ${isPendingDelete ? styles.titlePendingDelete : ""}`}>
                           {job.title}
-                          {hasPending && <span style={{ marginLeft: "8px", fontSize: "0.75rem", color: "#d97706", fontWeight: 700 }}>(Draft)</span>}
+                          {isPendingDelete ? (
+                            <span style={{ marginLeft: "8px", fontSize: "0.75rem", color: "#dc2626", fontWeight: 700 }}>
+                              (Queued for Delete)
+                            </span>
+                          ) : isPendingSave ? (
+                            <span style={{ marginLeft: "8px", fontSize: "0.75rem", color: "#d97706", fontWeight: 700 }}>
+                              (Draft Edit)
+                            </span>
+                          ) : null}
                         </div>
                         <div className={styles.jobIdSub}>{job.id}</div>
                       </td>
                       <td>
-                        <span className={`${styles.badge} ${isUnlisted ? styles.badgeUnlisted : styles.badgeListed}`}>
-                          {isUnlisted ? "○ Unlisted" : "● Listed"}
-                        </span>
+                        {isPendingDelete ? (
+                          <span className={`${styles.badge} ${styles.badgePendingDelete}`}>
+                            ✕ Pending Delete
+                          </span>
+                        ) : (
+                          <span className={`${styles.badge} ${isUnlisted ? styles.badgeUnlisted : styles.badgeListed}`}>
+                            {isUnlisted ? "○ Unlisted" : "● Listed"}
+                          </span>
+                        )}
                       </td>
                       <td>
                         <span className={`${styles.badge} ${styles.badgeDept}`}>{job.department}</span>
@@ -636,18 +677,30 @@ export default function AdminClient({ initialJobs }: AdminClientProps) {
                       <td>{job.location}</td>
                       <td>
                         <div className={styles.tableActions}>
-                          <button onClick={() => handleOpenEditModal(job)} className={styles.btnSecondary} style={{ padding: "6px 12px" }}>
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => handleToggleStatusDraft(job)}
-                            className={isUnlisted ? styles.btnSuccess : styles.btnWarning}
-                          >
-                            {isUnlisted ? "Relist" : "Unlist"}
-                          </button>
-                          <button onClick={() => requestDeleteJobDraft(job)} className={styles.btnDanger}>
-                            Delete
-                          </button>
+                          {isPendingDelete ? (
+                            <button onClick={() => handleUndoDelete(job)} className={styles.btnUndo}>
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                <polyline points="1 4 1 10 7 10" />
+                                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+                              </svg>
+                              Undo Delete
+                            </button>
+                          ) : (
+                            <>
+                              <button onClick={() => handleOpenEditModal(job)} className={styles.btnSecondary} style={{ padding: "6px 12px" }}>
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => handleToggleStatusDraft(job)}
+                                className={isUnlisted ? styles.btnSuccess : styles.btnWarning}
+                              >
+                                {isUnlisted ? "Relist" : "Unlist"}
+                              </button>
+                              <button onClick={() => requestDeleteJobDraft(job)} className={styles.btnDanger}>
+                                Delete
+                              </button>
+                            </>
+                          )}
                         </div>
                       </td>
                     </tr>
