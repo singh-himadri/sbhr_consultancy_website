@@ -316,7 +316,7 @@ export default function AdminClient({ initialJobs }: AdminClientProps) {
     showToast(`Draft: "${job.title}" queued for deletion. Click "Commit Changes" to publish.`, "info");
   };
 
-  // BATCH COMMIT: Push all pending draft changes to GitHub at once
+  // BATCH COMMIT: Push all pending draft changes to GitHub in 1 SINGLE ATOMIC COMMIT
   const handleCommitAllChanges = async () => {
     const pendingList = Object.values(pendingChanges);
     if (pendingList.length === 0) return;
@@ -328,102 +328,129 @@ export default function AdminClient({ initialJobs }: AdminClientProps) {
     }
 
     setIsCommitting(true);
-    showToast(`Pushing ${pendingList.length} draft change(s) to GitHub...`, "info");
+    showToast(`Committing ${pendingList.length} draft change(s) in 1 single commit...`, "info");
 
-    let successCount = 0;
-    let failCount = 0;
+    const repoOwner = "singh-himadri";
+    const repoName = "sbhr_consultancy_website";
+    const branch = "main";
+    const headers = {
+      Authorization: `token ${activeToken}`,
+      Accept: "application/vnd.github.v3+json",
+      "Content-Type": "application/json",
+    };
 
-    for (const action of pendingList) {
-      const job = action.job;
-      const filename = `${job.id}.json`;
-      const targetPath = `src/content/jobs/${filename}`;
-      const url = `https://api.github.com/repos/singh-himadri/sbhr_consultancy_website/contents/${targetPath}`;
-      const existingSha = fileShas[job.id];
-
-      try {
-        if (action.type === "save") {
-          const jsonString = JSON.stringify(job, null, 2);
-          const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
-
-          const bodyPayload: any = {
-            message: `Admin update job: ${job.title}`,
-            content: base64Content,
-            branch: "main",
-          };
-          if (existingSha) bodyPayload.sha = existingSha;
-
-          const res = await fetch(url, {
-            method: "PUT",
-            headers: {
-              Authorization: `token ${activeToken}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(bodyPayload),
-          });
-
-          if (!res.ok) {
-            if (res.status === 401) {
-              const newToken = prompt("Bad Credentials: Your GitHub Token is invalid or expired. Enter a valid GitHub PAT:");
-              if (newToken && newToken.trim()) {
-                localStorage.setItem("sbhr_admin_pat", newToken.trim());
-              }
-              throw new Error("Bad credentials");
-            }
-            throw new Error(`Failed to commit ${job.id}`);
+    try {
+      // 1. Get latest commit SHA on main branch
+      const refRes = await fetch(
+        `https://api.github.com/repos/${repoOwner}/${repoName}/git/refs/heads/${branch}`,
+        { headers }
+      );
+      if (!refRes.ok) {
+        if (refRes.status === 401) {
+          const newToken = prompt("Bad Credentials: Your GitHub Token is invalid or expired. Enter a valid GitHub PAT:");
+          if (newToken && newToken.trim()) {
+            localStorage.setItem("sbhr_admin_pat", newToken.trim());
           }
-
-          const resData = await res.json();
-          if (resData.content?.sha) {
-            setFileShas((prev) => ({ ...prev, [job.id]: resData.content.sha }));
-          }
-          successCount++;
-        } else if (action.type === "delete") {
-          if (!existingSha) {
-            console.warn(`SHA missing for deleting ${job.id}`);
-            continue;
-          }
-
-          const res = await fetch(url, {
-            method: "DELETE",
-            headers: {
-              Authorization: `token ${activeToken}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              message: `Admin delete job: ${job.title}`,
-              sha: existingSha,
-              branch: "main",
-            }),
-          });
-
-          if (!res.ok) {
-            if (res.status === 401) {
-              const newToken = prompt("Bad Credentials: Your GitHub Token is invalid or expired. Enter a valid GitHub PAT:");
-              if (newToken && newToken.trim()) {
-                localStorage.setItem("sbhr_admin_pat", newToken.trim());
-              }
-              throw new Error("Bad credentials");
-            }
-            throw new Error(`Failed to delete ${job.id}`);
-          }
-
-          successCount++;
+          throw new Error("Bad credentials");
         }
-      } catch (err: any) {
-        console.error(`Commit failed for ${job.id}:`, err);
-        failCount++;
+        throw new Error("Failed to get latest branch ref");
       }
-    }
+      const refData = await refRes.json();
+      const latestCommitSha = refData.object.sha;
 
-    setIsCommitting(false);
+      // 2. Get tree SHA of the latest commit
+      const commitRes = await fetch(
+        `https://api.github.com/repos/${repoOwner}/${repoName}/git/commits/${latestCommitSha}`,
+        { headers }
+      );
+      if (!commitRes.ok) throw new Error("Failed to get base commit tree");
+      const commitData = await commitRes.json();
+      const baseTreeSha = commitData.tree.sha;
 
-    if (failCount === 0) {
+      // 3. Build Git tree array payload for all modified/deleted jobs
+      const treeItems = pendingList.map((action) => {
+        const path = `src/content/jobs/${action.job.id}.json`;
+        if (action.type === "save") {
+          return {
+            path,
+            mode: "100644",
+            type: "blob",
+            content: JSON.stringify(action.job, null, 2),
+          };
+        } else {
+          // Deleting file: setting sha to null removes it from Git tree
+          return {
+            path,
+            mode: "100644",
+            type: "blob",
+            sha: null,
+          };
+        }
+      });
+
+      // 4. Create new Git Tree
+      const createTreeRes = await fetch(
+        `https://api.github.com/repos/${repoOwner}/${repoName}/git/trees`,
+        {
+          method: "POST",
+          headers,
+          body: JSON.stringify({
+            base_tree: baseTreeSha,
+            tree: treeItems,
+          }),
+        }
+      );
+      if (!createTreeRes.ok) throw new Error("Failed to create Git tree");
+      const treeData = await createTreeRes.json();
+      const newTreeSha = treeData.sha;
+
+      // 5. Create 1 single Git Commit
+      const createCommitRes = await fetch(
+        `https://api.github.com/repos/${repoOwner}/${repoName}/git/commits`,
+        {
+          method: "POST",
+          headers,
+          body: JSON.stringify({
+            message: `Admin batch update: ${pendingList.length} job opening(s)`,
+            tree: newTreeSha,
+            parents: [latestCommitSha],
+          }),
+        }
+      );
+      if (!createCommitRes.ok) throw new Error("Failed to create commit");
+      const newCommitData = await createCommitRes.json();
+      const newCommitSha = newCommitData.sha;
+
+      // 6. Update main branch ref to point to new single commit
+      const updateRefRes = await fetch(
+        `https://api.github.com/repos/${repoOwner}/${repoName}/git/refs/heads/${branch}`,
+        {
+          method: "PATCH",
+          headers,
+          body: JSON.stringify({
+            sha: newCommitSha,
+            force: false,
+          }),
+        }
+      );
+      if (!updateRefRes.ok) throw new Error("Failed to update branch ref");
+
+      // Success! Reset pending drafts and sync GitHub state
       setPendingChanges({});
-      showToast(`Committed ${successCount} change(s) successfully! Site pipeline triggered.`, "success");
-    } else {
-      showToast(`Committed ${successCount} change(s), ${failCount} failed. Please retry.`, "error");
+      showToast(
+        `Batch commit successful! 1 commit pushed for ${pendingList.length} change(s). Pipeline triggered once.`,
+        "success"
+      );
+
+      fetchJobsFromGitHub(activeToken);
+    } catch (err: any) {
+      console.error("Batch commit failed:", err);
+      showToast(`Batch commit failed: ${err.message}`, "error");
+    } finally {
+      setIsCommitting(false);
     }
   };
+
 
   const pendingCount = Object.keys(pendingChanges).length;
 
