@@ -1,0 +1,10 @@
+{
+  "id": "SENIOR DEV 1",
+  "title": "Fullstack Web & Platform Engineer",
+  "department": "Engineering",
+  "type": "Contract",
+  "location": "Delhi NCR",
+  "description": "Lead the technical design and development of scalable web-based applications, frontend UI architecture, and high-throughput Node.js microservices.",
+  "details": "### Role Overview\nLead technical design and development of soft-real-time web-based applications and enterprise platforms.\n\n### Responsibilities\n- Define application architecture, technology choices, coding standards, and development practices.\n- Design scalable, secure frontend (React) and backend (Node.js) systems.\n- Lead database modeling, API optimization, and security practices (auth, encryption, rate-limiting).\n- Mentor junior developers and drive technical design reviews.\n\n### Requirements\n- Strong experience in Node.js, TypeScript, and React.\n- 5+ years of software development experience across web applications and databases.",
+  "status": "unlisted"
+}
