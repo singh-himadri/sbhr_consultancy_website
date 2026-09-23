@@ -1,0 +1,10 @@
+{
+  "id": "Senior Dev",
+  "title": "Senior Data Engineering Associate",
+  "department": "IT & ITES",
+  "type": "Full-Time",
+  "location": "Kolkata",
+  "description": "Transform data into actionable insights within our Data and Analytics Engineering practice, building scalable data pipelines and cloud warehouses.",
+  "details": "### Role Overview\nAs a Senior Data Engineering Associate, you will play a pivotal role transforming data into actionable insights within our Data Modernisation practice. You will leverage cloud-native platforms to design, develop, and implement enterprise data solutions.\n\n### Responsibilities\n- Develop and maintain data pipelines using Informatica PowerCenter and cloud-native ETL tools.\n- Implement database optimization techniques on AWS, Azure, and Snowflake data platforms.\n- Design and manage data warehouses and data lakes to facilitate efficient data storage and retrieval.\n- Conduct data validation, quality checks, and performance tuning.\n\n### Requirements\n- Bachelor's degree in CS, IT, or related quantitative field.\n- 4+ years of hands-on experience in ETL/ELT development and cloud data engineering.",
+  "status": "unlisted"
+}
