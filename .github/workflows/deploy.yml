@@ -69,7 +69,10 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.runner }} ${{ steps.detect-package-manager.outputs.command }}
 
       - name: Build with Next.js
+        env:
+          NEXT_PUBLIC_GITHUB_TOKEN: ${{ vars.NEXT_PUBLIC_GITHUB_TOKEN }}
         run: ${{ steps.detect-package-manager.outputs.runner }} run build
+
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

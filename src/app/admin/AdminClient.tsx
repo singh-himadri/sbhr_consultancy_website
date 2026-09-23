@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import styles from "./admin.module.css";
 import { JobOpening } from "../jobs/JobsClient";
+import logoImg from "../../../public/Logo.svg";
+
 
 interface AdminClientProps {
   initialJobs: JobOpening[];
@@ -431,7 +433,7 @@ export default function AdminClient({ initialJobs }: AdminClientProps) {
       <div className={styles.loginOverlay}>
         <div className={styles.loginCard}>
           <div className={styles.loginBrand}>
-            <img src="/Logo.svg" alt="SBHR Logo" />
+            <img src={logoImg.src} alt="SBHR Logo" />
             <h2>SBHR Job Portal Admin</h2>
           </div>
           <p>Enter your credentials to access the job management dashboard.</p>
@@ -496,7 +498,7 @@ export default function AdminClient({ initialJobs }: AdminClientProps) {
       {/* Top Navigation */}
       <header className={styles.topNav}>
         <div className={styles.navBrand}>
-          <img src="/Logo.svg" alt="SBHR Logo" />
+          <img src={logoImg.src} alt="SBHR Logo" />
           <h1>SBHR Admin Portal</h1>
         </div>
         <div className={styles.navActions}>
