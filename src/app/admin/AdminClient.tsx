@@ -80,6 +80,38 @@ export default function AdminClient({ initialJobs }: AdminClientProps) {
   const [editingJob, setEditingJob] = useState<JobOpening>(EMPTY_JOB);
   const [isNew, setIsNew] = useState(true);
 
+  // Slide-out Markdown User Guide State
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
+
+  const STARTER_JOB_TEMPLATE = `## Role Overview
+Join our high-performance team to design, build, and scale enterprise solutions. We are seeking a driven professional with strong domain expertise to lead key initiatives.
+
+## Key Responsibilities
+- Lead cross-functional project execution and deliver scalable solutions.
+- Collaborate with engineering, business, and operations leadership.
+- Conduct code reviews, establish best practices, and mentor team members.
+- Optimize system performance, reliability, and security controls.
+
+## Requirements & Qualifications
+- Bachelor's degree in Computer Science, Engineering, or related domain.
+- 5+ years of hands-on experience in software development / IT systems.
+- Proficiency in modern tech stacks, cloud infrastructure (AWS/Azure), and CI/CD.
+- Strong analytical skills, communication skills, and problem-solving mindset.
+
+## What We Offer
+- Competitive salary package with performance bonuses.
+- Comprehensive health insurance and wellness benefits.
+- Hybrid / Flexible working arrangements.
+- Accelerated career progression and learning support.`;
+
+  const handleInsertTemplate = () => {
+    setEditingJob((prev) => ({
+      ...prev,
+      details: prev.details && prev.details.trim() ? `${prev.details}\n\n${STARTER_JOB_TEMPLATE}` : STARTER_JOB_TEMPLATE,
+    }));
+    showToast("Starter Job Template inserted into Full Details!", "success");
+  };
+
   const [confirmState, setConfirmState] = useState<ConfirmState>({
     isOpen: false,
     title: "",
@@ -118,25 +150,47 @@ export default function AdminClient({ initialJobs }: AdminClientProps) {
       const trimmed = input.trim();
       localStorage.setItem("sbhr_admin_pat", trimmed);
       showToast("GitHub Token saved!", "success");
+      // eslint-disable-next-line react-hooks/immutability
       if (trimmed) fetchJobsFromGitHub(trimmed);
     }
   };
+
+  // Filter State (Default: all)
+  const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [filterType, setFilterType] = useState<string>("all");
+  const [filterDepartment, setFilterDepartment] = useState<string>("all");
+  const [filterLocation, setFilterLocation] = useState<string>("all");
+  const [filterSearch, setFilterSearch] = useState<string>("");
+
+  // Pagination State (Default: page 1, 10 rows per page)
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+
+  // Reset to page 1 whenever filters or rows per page change
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCurrentPage(1);
+  }, [filterStatus, filterType, filterDepartment, filterLocation, filterSearch, rowsPerPage]);
 
   // Prevent background page scrolling when modal or login overlay is active
   useEffect(() => {
     if (!isAuthenticated || isModalOpen || confirmState.isOpen) {
       document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "";
+      document.body.style.overflow = ""; 
+      document.documentElement.style.overflow = "";
     }
     return () => {
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     };
   }, [isAuthenticated, isModalOpen, confirmState.isOpen]);
 
   // Check auth on mount
   useEffect(() => {
     const isAuth = sessionStorage.getItem("sbhr_admin_auth") === "true";
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsAuthenticated(isAuth);
 
     const tokenToUse = getToken();
@@ -214,7 +268,8 @@ export default function AdminClient({ initialJobs }: AdminClientProps) {
 
       setJobs(loadedJobs);
       setFileShas(shas);
-    } catch (err: any) {
+    }// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    catch (err: any) {
       console.error(err);
       if (err.message === "Bad credentials") {
         showToast("GitHub Token invalid or expired. Click 'Set Token' to update.", "error");
@@ -463,7 +518,9 @@ export default function AdminClient({ initialJobs }: AdminClientProps) {
       );
 
       fetchJobsFromGitHub(activeToken);
-    } catch (err: any) {
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    catch (err: any) {
       console.error("Batch commit failed:", err);
       showToast(`Batch commit failed: ${err.message}`, "error");
     } finally {
@@ -601,47 +658,319 @@ export default function AdminClient({ initialJobs }: AdminClientProps) {
           </div>
         )}
 
+        {/* Dashboard Header Title Bar & Add Job Button */}
         <div className={styles.dashboardHeader}>
           <div className={styles.dashboardTitle}>
             <h2>Manage Job Openings</h2>
-            <p>Make local draft edits, then click <strong>Commit Changes</strong> to push to GitHub.</p>
+            <p>Filter, edit, or create jobs. Click <strong>Commit Changes</strong> to publish updates.</p>
           </div>
-          <button onClick={handleOpenAddModal} className={styles.btnPrimary} style={{ width: "auto", padding: "12px 24px" }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+          <button onClick={handleOpenAddModal} className={styles.btnAddJob}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <line x1="12" y1="5" x2="12" y2="19" />
               <line x1="5" y1="12" x2="19" y2="12" />
             </svg>
-            Add New Job
+            <span>Add New Job</span>
           </button>
         </div>
 
-        {/* Jobs Table */}
-        <div className={styles.tableContainer}>
-          <table className={styles.jobsTable}>
-            <thead>
-              <tr>
-                <th>Job Title & ID</th>
-                <th>Status</th>
-                <th>Department</th>
-                <th>Job Type</th>
-                <th>Location</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {jobs.length > 0 ? (
-                jobs.map((job) => {
-                  const isUnlisted = job.status === "unlisted";
-                  const pendingAction = pendingChanges[job.id];
-                  const isPendingDelete = pendingAction?.type === "delete";
-                  const isPendingSave = pendingAction?.type === "save";
+        {/* Metrics Summary Stat Cards */}
+        {(() => {
+          const totalCount = jobs.length;
+          const listedCount = jobs.filter((j) => j.status !== "unlisted").length;
+          const unlistedCount = jobs.filter((j) => j.status === "unlisted").length;
 
-                  return (
-                    <tr
-                      key={job.id}
-                      className={isPendingDelete ? styles.rowPendingDelete : undefined}
-                      style={!isPendingDelete && isPendingSave ? { backgroundColor: "#fefce8" } : undefined}
-                    >
+          return (
+            <div className={styles.statsGrid}>
+              <div
+                className={`${styles.statCard} ${styles.statCardTotal} ${
+                  filterStatus === "all" ? styles.statCardActive : ""
+                }`}
+                onClick={() => setFilterStatus("all")}
+                title="Click to view all jobs"
+              >
+                <div className={styles.statCardIcon}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                  </svg>
+                </div>
+                <div className={styles.statCardInfo}>
+                  <div className={styles.statCardVal}>{totalCount}</div>
+                  <div className={styles.statCardTitle}>Total Openings</div>
+                </div>
+                <div className={styles.statCardMeta}>All jobs in portal</div>
+              </div>
+
+              <div
+                className={`${styles.statCard} ${styles.statCardListed} ${
+                  filterStatus === "listed" ? styles.statCardActive : ""
+                }`}
+                onClick={() => setFilterStatus("listed")}
+                title="Click to filter by Listed jobs"
+              >
+                <div className={styles.statCardIcon}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
+                  </svg>
+                </div>
+                <div className={styles.statCardInfo}>
+                  <div className={styles.statCardVal}>{listedCount}</div>
+                  <div className={styles.statCardTitle}>Listed Jobs</div>
+                </div>
+                <div className={styles.statCardMeta}>Visible on website</div>
+              </div>
+
+              <div
+                className={`${styles.statCard} ${styles.statCardUnlisted} ${
+                  filterStatus === "unlisted" ? styles.statCardActive : ""
+                }`}
+                onClick={() => setFilterStatus("unlisted")}
+                title="Click to filter by Unlisted jobs"
+              >
+                <div className={styles.statCardIcon}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                    <line x1="1" y1="1" x2="23" y2="23" />
+                  </svg>
+                </div>
+                <div className={styles.statCardInfo}>
+                  <div className={styles.statCardVal}>{unlistedCount}</div>
+                  <div className={styles.statCardTitle}>Unlisted Jobs</div>
+                </div>
+                <div className={styles.statCardMeta}>Hidden from public</div>
+              </div>
+
+              <div
+                className={`${styles.statCard} ${styles.statCardDraft}`}
+                onClick={() => {
+                  if (pendingCount > 0) handleCommitAllChanges();
+                }}
+                title={pendingCount > 0 ? "Click to commit draft changes" : "Draft changes count"}
+              >
+                <div className={styles.statCardIcon}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                  </svg>
+                </div>
+                <div className={styles.statCardInfo}>
+                  <div className={styles.statCardVal}>{pendingCount}</div>
+                  <div className={styles.statCardTitle}>Pending Drafts</div>
+                </div>
+                <div className={styles.statCardMeta}>
+                  {pendingCount > 0 ? "Uncommitted edits" : "No pending drafts"}
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* Filter Controls Card */}
+        {(() => {
+          const availableDepartments = Array.from(
+            new Set([...DEPARTMENTS, ...jobs.map((j) => j.department).filter(Boolean)])
+          ).sort();
+
+          const availableJobTypes = Array.from(
+            new Set([...JOB_TYPES, ...jobs.map((j) => j.type).filter(Boolean)])
+          ).sort();
+
+          const availableLocations = Array.from(
+            new Set(jobs.map((j) => j.location).filter(Boolean))
+          ).sort();
+
+          const isFiltered =
+            filterStatus !== "all" ||
+            filterType !== "all" ||
+            filterDepartment !== "all" ||
+            filterLocation !== "all" ||
+            filterSearch.trim() !== "";
+
+          const handleResetFilters = () => {
+            setFilterStatus("all");
+            setFilterType("all");
+            setFilterDepartment("all");
+            setFilterLocation("all");
+            setFilterSearch("");
+          };
+
+          return (
+            <div className={styles.filterSection}>
+              <div className={styles.filterHeader}>
+                <div className={styles.filterHeaderLeft}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+                  </svg>
+                  <span className={styles.filterTitle}>Filter & Search Jobs</span>
+                  {isFiltered && (
+                    <span className={styles.activeFilterBadge}>Active Filters</span>
+                  )}
+                </div>
+                {isFiltered && (
+                  <button onClick={handleResetFilters} className={styles.btnResetFilter}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <line x1="18" y1="6" x2="6" y2="18" />
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                    Reset Filters
+                  </button>
+                )}
+              </div>
+
+              <div className={styles.filterGrid}>
+                {/* Search Input */}
+                <div className={styles.filterGroup}>
+                  <label htmlFor="filter-search">Search Keyword</label>
+                  <div className={styles.filterInputWrapper}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                      <circle cx="11" cy="11" r="8" />
+                      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
+                    <input
+                      type="text"
+                      id="filter-search"
+                      value={filterSearch}
+                      onChange={(e) => setFilterSearch(e.target.value)}
+                      placeholder="Title, ID, keyword..."
+                      className={styles.filterInput}
+                    />
+                  </div>
+                </div>
+
+                {/* Status Filter */}
+                <div className={styles.filterGroup}>
+                  <label htmlFor="filter-status">Listing Status</label>
+                  <select
+                    id="filter-status"
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value)}
+                    className={styles.filterSelect}
+                  >
+                    <option value="all">All Statuses ({jobs.length})</option>
+                    <option value="listed">Listed ({jobs.filter((j) => j.status !== "unlisted").length})</option>
+                    <option value="unlisted">Unlisted ({jobs.filter((j) => j.status === "unlisted").length})</option>
+                  </select>
+                </div>
+
+                {/* Job Type Filter */}
+                <div className={styles.filterGroup}>
+                  <label htmlFor="filter-type">Job Type</label>
+                  <select
+                    id="filter-type"
+                    value={filterType}
+                    onChange={(e) => setFilterType(e.target.value)}
+                    className={styles.filterSelect}
+                  >
+                    <option value="all">All Job Types</option>
+                    {availableJobTypes.map((t) => (
+                      <option key={t} value={t}>
+                        {t}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Department Filter */}
+                <div className={styles.filterGroup}>
+                  <label htmlFor="filter-dept">Department</label>
+                  <select
+                    id="filter-dept"
+                    value={filterDepartment}
+                    onChange={(e) => setFilterDepartment(e.target.value)}
+                    className={styles.filterSelect}
+                  >
+                    <option value="all">All Departments</option>
+                    {availableDepartments.map((d) => (
+                      <option key={d} value={d}>
+                        {d}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Location Filter */}
+                <div className={styles.filterGroup}>
+                  <label htmlFor="filter-loc">Location</label>
+                  <select
+                    id="filter-loc"
+                    value={filterLocation}
+                    onChange={(e) => setFilterLocation(e.target.value)}
+                    className={styles.filterSelect}
+                  >
+                    <option value="all">All Locations</option>
+                    {availableLocations.map((loc) => (
+                      <option key={loc} value={loc}>
+                        {loc}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* Filtered Jobs Table */}
+        {(() => {
+          const filteredJobs = jobs.filter((job) => {
+            const isUnlisted = job.status === "unlisted";
+
+            if (filterStatus === "listed" && isUnlisted) return false;
+            if (filterStatus === "unlisted" && !isUnlisted) return false;
+
+            if (filterType !== "all" && job.type !== filterType) return false;
+            if (filterDepartment !== "all" && job.department !== filterDepartment) return false;
+            if (filterLocation !== "all" && job.location !== filterLocation) return false;
+
+            if (filterSearch.trim()) {
+              const q = filterSearch.toLowerCase().trim();
+              const matchTitle = job.title.toLowerCase().includes(q);
+              const matchId = job.id.toLowerCase().includes(q);
+              const matchDept = job.department.toLowerCase().includes(q);
+              const matchLoc = job.location.toLowerCase().includes(q);
+              if (!matchTitle && !matchId && !matchDept && !matchLoc) return false;
+            }
+
+            return true;
+          });
+
+          // Pagination Calculations
+          const totalFiltered = filteredJobs.length;
+          const totalPages = Math.ceil(totalFiltered / rowsPerPage) || 1;
+          const safeCurrentPage = Math.min(Math.max(currentPage, 1), totalPages);
+
+          const startIndex = (safeCurrentPage - 1) * rowsPerPage;
+          const endIndex = Math.min(startIndex + rowsPerPage, totalFiltered);
+          const paginatedJobs = filteredJobs.slice(startIndex, endIndex);
+
+          return (
+            <div className={styles.tableContainer}>
+              <table className={styles.jobsTable}>
+                <thead>
+                  <tr>
+                    <th>Job Title & ID</th>
+                    <th>Status</th>
+                    <th>Department</th>
+                    <th>Job Type</th>
+                    <th>Location</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedJobs.length > 0 ? (
+                    paginatedJobs.map((job, idx) => {
+                      const isUnlisted = job.status === "unlisted";
+                      const pendingAction = pendingChanges[job.id];
+                      const isPendingDelete = pendingAction?.type === "delete";
+                      const isPendingSave = pendingAction?.type === "save";
+
+                      return (
+                        <tr
+                          key={`${job.id}-${idx}`}
+                          className={isPendingDelete ? styles.rowPendingDelete : undefined}
+                          style={!isPendingDelete && isPendingSave ? { backgroundColor: "#fefce8" } : undefined}
+                        >
                       <td>
                         <div className={`${styles.jobTitleCell} ${isPendingDelete ? styles.titlePendingDelete : ""}`}>
                           {job.title}
@@ -709,13 +1038,110 @@ export default function AdminClient({ initialJobs }: AdminClientProps) {
               ) : (
                 <tr>
                   <td colSpan={6} style={{ textAlign: "center", padding: "40px", color: "#94a3b8" }}>
-                    {isLoading ? "Fetching job positions..." : "No job openings found. Click 'Add New Job' to create one."}
+                    {isLoading ? (
+                      "Fetching job positions..."
+                    ) : (
+                      <div style={{ padding: "12px 0" }}>
+                        <p style={{ margin: "0 0 12px 0", fontSize: "0.95rem" }}>
+                          No job openings found matching your selected filters.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFilterStatus("all");
+                            setFilterType("all");
+                            setFilterDepartment("all");
+                            setFilterLocation("all");
+                            setFilterSearch("");
+                          }}
+                          className={styles.btnSecondary}
+                          style={{ margin: "0 auto" }}
+                        >
+                          Clear & Reset Filters
+                        </button>
+                      </div>
+                    )}
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
+
+          {/* Pagination Controls Footer */}
+          <div className={styles.paginationFooter}>
+            <div className={styles.paginationRowsSelect}>
+              <label htmlFor="rows-per-page">Rows per page:</label>
+              <select
+                id="rows-per-page"
+                value={rowsPerPage}
+                onChange={(e) => setRowsPerPage(Number(e.target.value))}
+                className={styles.rowsSelect}
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={15}>15</option>
+                <option value={20}>20</option>
+                <option value={25}>25</option>
+              </select>
+            </div>
+
+            <div className={styles.paginationInfo}>
+              {totalFiltered > 0 ? (
+                <>
+                  Showing <strong>{startIndex + 1}</strong>–<strong>{endIndex}</strong> of <strong>{totalFiltered}</strong> positions
+                </>
+              ) : (
+                "No positions to display"
+              )}
+            </div>
+
+            <div className={styles.paginationControls}>
+              <button
+                type="button"
+                onClick={() => setCurrentPage(1)}
+                disabled={safeCurrentPage === 1}
+                className={styles.pageBtn}
+                title="First Page"
+              >
+                «
+              </button>
+              <button
+                type="button"
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={safeCurrentPage === 1}
+                className={styles.pageBtn}
+                title="Previous Page"
+              >
+                ‹ Prev
+              </button>
+
+              <span className={styles.pageIndicator}>
+                Page <strong>{safeCurrentPage}</strong> of <strong>{totalPages}</strong>
+              </span>
+
+              <button
+                type="button"
+                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                disabled={safeCurrentPage >= totalPages}
+                className={styles.pageBtn}
+                title="Next Page"
+              >
+                Next ›
+              </button>
+              <button
+                type="button"
+                onClick={() => setCurrentPage(totalPages)}
+                disabled={safeCurrentPage >= totalPages}
+                className={styles.pageBtn}
+                title="Last Page"
+              >
+                »
+              </button>
+            </div>
+          </div>
         </div>
+          );
+        })()}
       </main>
 
       {/* Add / Edit Job Modal */}
@@ -732,7 +1158,7 @@ export default function AdminClient({ initialJobs }: AdminClientProps) {
               </button>
             </div>
 
-            <form onSubmit={handleSaveJobDraft}>
+            <form onSubmit={handleSaveJobDraft} className={styles.modalForm}>
               <div className={styles.modalBody}>
                 <div className={styles.formGrid}>
                   <div className={styles.formGroup}>
@@ -742,14 +1168,25 @@ export default function AdminClient({ initialJobs }: AdminClientProps) {
                       value={editingJob.title}
                       onChange={(e) => {
                         const titleVal = e.target.value;
-                        const generatedSlug = titleVal
+                        const baseSlug = titleVal
                           .toLowerCase()
                           .replace(/[^a-z0-9]+/g, "-")
                           .replace(/(^-|-$)/g, "");
+
+                        let uniqueSlug = baseSlug;
+                        if (isNew && baseSlug) {
+                          let counter = 1;
+                          const existingIds = new Set(jobs.map((j) => j.id.toLowerCase()));
+                          while (existingIds.has(uniqueSlug.toLowerCase())) {
+                            counter++;
+                            uniqueSlug = `${baseSlug}-${counter}`;
+                          }
+                        }
+
                         setEditingJob((prev) => ({
                           ...prev,
                           title: titleVal,
-                          id: isNew ? generatedSlug || prev.id : prev.id,
+                          id: isNew ? uniqueSlug || prev.id : prev.id,
                         }));
                       }}
                       placeholder="e.g. Senior Full Stack Engineer"
@@ -836,7 +1273,22 @@ export default function AdminClient({ initialJobs }: AdminClientProps) {
                   </div>
 
                   <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-                    <label>Full Details (Markdown / Detailed Description)</label>
+                    <div className={styles.labelWithAction}>
+                      <label>Full Details (Markdown / Detailed Description)</label>
+                      <button
+                        type="button"
+                        onClick={() => setIsGuideOpen(true)}
+                        className={styles.btnGuideToggle}
+                        title="Open Markdown Formatting Guide & Starter Template"
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                          <line x1="12" y1="17" x2="12.01" y2="17" />
+                        </svg>
+                        <span>Formatting Guide & Template</span>
+                      </button>
+                    </div>
                     <textarea
                       rows={8}
                       value={editingJob.details || ""}
@@ -902,6 +1354,78 @@ export default function AdminClient({ initialJobs }: AdminClientProps) {
           }`}
         >
           {toast.text}
+        </div>
+      )}
+
+      {/* Slide-out Markdown Formatting Guide Side Panel */}
+      {isGuideOpen && (
+        <div className={styles.drawerOverlay} onClick={() => setIsGuideOpen(false)}>
+          <aside className={styles.guideDrawer} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.drawerHeader}>
+              <div className={styles.drawerTitle}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                  <polyline points="10 9 9 9 8 9" />
+                </svg>
+                <h3>Markdown User Guide</h3>
+              </div>
+              <button onClick={() => setIsGuideOpen(false)} className={styles.closeBtn} title="Close Guide">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+
+            <div className={styles.drawerBody}>
+              {/* Insert Starter Template Action Box */}
+              <div className={styles.templateBanner}>
+                <div>
+                  <strong>Need a structured format?</strong>
+                  <p>Insert our pre-built job template directly into your editor.</p>
+                </div>
+                <button type="button" onClick={handleInsertTemplate} className={styles.btnInsertTemplate}>
+                  ⚡ Insert Starter Template
+                </button>
+              </div>
+
+              {/* Formatting Rules */}
+              <div className={styles.guideSection}>
+                <h4>1. Section Headings (`##`)</h4>
+                <p>Use double hashes `##` to create large section headers for Responsibilities, Overview, etc.</p>
+                <pre className={styles.codeSnippet}>
+                  {`## Role Overview\n\n## Key Responsibilities\n\n## Requirements & Qualifications\n\n## What We Offer`}
+                </pre>
+              </div>
+
+              <div className={styles.guideSection}>
+                <h4>2. Bullet Point Lists (`-`)</h4>
+                <p>Use a dash `-` followed by a space to create clean bulleted lists.</p>
+                <pre className={styles.codeSnippet}>
+                  {`- Lead cross-functional team projects\n- Build high-availability cloud microservices\n- Conduct technical interviews and code reviews`}
+                </pre>
+              </div>
+
+              <div className={styles.guideSection}>
+                <h4>3. Text Formatting (Bold & Italics)</h4>
+                <p>Wrap words in `**` for bold or `*` for italics to highlight key terms.</p>
+                <pre className={styles.codeSnippet}>
+                  {`**5+ years** of software engineering experience.\nMust have *strong hands-on knowledge* of AWS.`}
+                </pre>
+              </div>
+
+              <div className={styles.guideSection}>
+                <h4>4. Numbered Lists (`1.`)</h4>
+                <p>Use numbers followed by a period for ordered recruitment steps or milestones.</p>
+                <pre className={styles.codeSnippet}>
+                  {`1. Technical Resume Screening\n2. System Design Interview\n3. Executive Leadership Fit`}
+                </pre>
+              </div>
+            </div>
+          </aside>
         </div>
       )}
     </div>

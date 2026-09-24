@@ -42,7 +42,8 @@ export default function Footer() {
             />
             <span className={styles.logoText}>
               SB<span className={styles.logoAccent}>HR</span>{" "}
-              <span className={styles.logoSub}>Consultancy</span>
+              <span className={styles.logoSub}>Consultancy</span>{" "}
+              <span className={styles.logoSub}>Pvt Ltd</span>
             </span>
           </Link>
 

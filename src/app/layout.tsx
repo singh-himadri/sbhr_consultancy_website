@@ -18,7 +18,7 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "SBHR Consultancy | Premier IT & Multi-Sector Staffing Agency Kolkata",
+  title: "SBHR Consultancy Pvt Ltd",
   description:
     "SBHR Consultancy is a leading recruitment and staffing agency established in 2019 in Kolkata. Specializing in IT, Engineering, Finance, Energy, and 12+ industry sectors with a 24–48 hour talent delivery SLA.",
   keywords:
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   authors: [{ name: "SBHR Consultancy" }],
   icons: { icon: "/Logo.svg" },
   openGraph: {
-    title: "SBHR Consultancy | Premier IT & Multi-Sector Staffing Agency Kolkata",
+    title: "SBHR Consultancy Pvt Ltd",
     description:
       "Veteran-guided recruitment solutions across 12+ industry domains. Pre-vetted candidate profiles delivered within 24–48 hours.",
     siteName: "SBHR Consultancy",

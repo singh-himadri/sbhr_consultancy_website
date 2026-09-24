@@ -4,7 +4,7 @@ import path from "path";
 import JobsClient, { JobOpening } from "./JobsClient";
 
 export const metadata = {
-  title: "Careers | SBHR Consultancy",
+  title: "Careers | SBHR Consultancy Pvt Ltd",
   description: "Explore active opportunities across engineering, product design, and operations. Apply directly through our secure pipeline.",
 };
 
