@@ -27,13 +27,15 @@ const INITIAL_FORM: FormData = {
   email: "",
   subject: "",
   message: "",
-  inquiryType: "Hiring Talent",
+  inquiryType: "Looking to Hire Talent",
 };
 
 export default function Contact() {
   const [formData, setFormData] = useState<FormData>(INITIAL_FORM);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const validate = (): boolean => {
     const tempErrors: FormErrors = {};
@@ -80,13 +82,34 @@ export default function Contact() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setServerError(null);
+
     if (validate()) {
-      console.log("Mock Contact Form Submitted:", formData);
-      setSubmitted(true);
-      setFormData(INITIAL_FORM);
-      setErrors({});
+      setIsSubmitting(true);
+      try {
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          setSubmitted(true);
+          setFormData(INITIAL_FORM);
+          setErrors({});
+        } else {
+          setServerError(data.error || "Failed to send message. Please try again later.");
+        }
+      } catch (err) {
+        console.error("Submission error:", err);
+        setServerError("Network error. Please check your connection and try again.");
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -182,9 +205,9 @@ export default function Contact() {
                     id="inquiryType"
                     value={formData.inquiryType}
                     options={[
-                      { value: "Hiring Talent", label: "Looking to Hire Talent" },
-                      { value: "Looking for Job", label: "Looking for Job Opportunities" },
-                      { value: "General Inquiry", label: "General Business Inquiry" },
+                      { value: "Looking to Hire Talent", label: "Looking to Hire Talent" },
+                      { value: "Looking for Job Opportunities", label: "Looking for Job Opportunities" },
+                      { value: "General Business Inquiry", label: "General Business Inquiry" },
                     ]}
                     onChange={(val) => setFormData((prev) => ({ ...prev, inquiryType: val }))}
                   />
@@ -228,8 +251,19 @@ export default function Contact() {
                 )}
               </div>
 
-              <button type="submit" className="btn btn-primary btn-lg" id="contact-submit-btn">
-                Send Message
+              {serverError && (
+                <div className={styles.errorText} style={{ marginBottom: "1rem", fontSize: "0.95rem" }} role="alert">
+                  ⚠️ {serverError}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                className="btn btn-primary btn-lg"
+                id="contact-submit-btn"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Sending..." : "Send Message"}
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <line x1="22" y1="2" x2="11" y2="13" />
                   <polygon points="22 2 15 22 11 13 2 9 22 2" />
