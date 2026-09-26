@@ -37,7 +37,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${inter.variable} ${plusJakartaSans.variable}`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${inter.variable} ${plusJakartaSans.variable}`}>
       <body style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
         {/* Scroll-reveal is observer-driven; without JS the elements would stay hidden. */}
         <noscript>
