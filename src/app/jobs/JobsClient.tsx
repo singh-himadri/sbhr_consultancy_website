@@ -97,8 +97,11 @@ export default function JobsClient({ jobs }: JobsClientProps) {
 
   const [selectedJob, setSelectedJob] = useState<JobOpening | null>(null);
   const [applyForm, setApplyForm] = useState<ApplyForm>(EMPTY_FORM);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [applyErrors, setApplyErrors] = useState<ApplyErrors>({});
   const [applySuccess, setApplySuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   // Filter out unlisted jobs from public view
   const publicJobs = jobs.filter((job) => job.status !== "unlisted");
@@ -109,7 +112,6 @@ export default function JobsClient({ jobs }: JobsClientProps) {
     return matchesDept && matchesType;
   });
 
-
   const toggleExpand = (jobId: string) => {
     setExpandedJobId(expandedJobId === jobId ? null : jobId);
   };
@@ -118,7 +120,9 @@ export default function JobsClient({ jobs }: JobsClientProps) {
     setSelectedJob(job);
     setApplySuccess(false);
     setApplyForm(EMPTY_FORM);
+    setSelectedFile(null);
     setApplyErrors({});
+    setServerError(null);
   };
 
   const closeApplyModal = () => setSelectedJob(null);
@@ -150,8 +154,23 @@ export default function JobsClient({ jobs }: JobsClientProps) {
     }
   };
 
-  const handleApplySubmit = (e: React.FormEvent) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setSelectedFile(file);
+      setApplyForm((prev) => ({
+        ...prev,
+        resumeUrl: `File: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`,
+      }));
+      if (applyErrors.resumeUrl) {
+        setApplyErrors((prev) => ({ ...prev, resumeUrl: undefined }));
+      }
+    }
+  };
+
+  const handleApplySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setServerError(null);
     const tempErrors: ApplyErrors = {};
     let isValid = true;
 
@@ -171,16 +190,57 @@ export default function JobsClient({ jobs }: JobsClientProps) {
       }
     }
 
-    if (!applyForm.resumeUrl.trim()) {
-      tempErrors.resumeUrl = "Resume link or file details are required.";
+    if (!selectedFile) {
+      tempErrors.resumeUrl = "Please select a resume file to upload.";
       isValid = false;
     }
 
     setApplyErrors(tempErrors);
 
-    if (isValid) {
-      console.log(`Mock Application Submitted for ${selectedJob?.title}:`, applyForm);
-      setApplySuccess(true);
+    if (isValid && selectedJob && selectedFile) {
+      setIsSubmitting(true);
+      const reader = new FileReader();
+
+      reader.onload = async () => {
+        try {
+          const base64Data = (reader.result as string).split(",")[1];
+          const payload = {
+            jobTitle: selectedJob.title,
+            name: applyForm.name,
+            email: applyForm.email,
+            coverNote: applyForm.coverNote,
+            fileName: selectedFile.name,
+            fileType: selectedFile.type,
+            fileData: base64Data,
+          };
+
+          const res = await fetch("/api/apply", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+
+          const data = await res.json();
+
+          if (res.ok && data.success) {
+            setApplySuccess(true);
+          } else {
+            setServerError(data.error || "Failed to submit application. Please try again.");
+          }
+        } catch (err) {
+          console.error("Job Application Submit Error:", err);
+          setServerError("Network error. Please try again.");
+        } finally {
+          setIsSubmitting(false);
+        }
+      };
+
+      reader.onerror = () => {
+        setIsSubmitting(false);
+        setServerError("Failed to read uploaded resume file. Please try again.");
+      };
+
+      reader.readAsDataURL(selectedFile);
     }
   };
 
@@ -528,19 +588,53 @@ export default function JobsClient({ jobs }: JobsClientProps) {
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label htmlFor="modal-resume" className={styles.label}>
-                    Resume Link <span className={styles.req}>(required)</span>
+                  <label htmlFor="modal-resume-file" className={styles.label}>
+                    Upload Resume <span className={styles.req}>(required)</span>
                   </label>
-                  <input
-                    type="text"
-                    id="modal-resume"
-                    name="resumeUrl"
-                    value={applyForm.resumeUrl}
-                    onChange={handleApplyChange}
-                    className={`${styles.input} ${applyErrors.resumeUrl ? styles.inputError : ""}`}
-                    placeholder="e.g. link to Google Drive / LinkedIn PDF"
-                    required
-                  />
+
+                  {selectedFile ? (
+                    <div className={styles.fileSelectedBadge}>
+                      <span style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                          <polyline points="14 2 14 8 20 8" />
+                        </svg>
+                        {selectedFile.name} ({(selectedFile.size / 1024).toFixed(1)} KB)
+                      </span>
+                      <button
+                        type="button"
+                        className={styles.removeFileBtn}
+                        onClick={() => {
+                          setSelectedFile(null);
+                          setApplyForm((prev) => ({ ...prev, resumeUrl: "" }));
+                        }}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ) : (
+                    <div className={styles.fileDropZone}>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--color-azure)" }}>
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="17 8 12 3 7 8" />
+                        <line x1="12" y1="3" x2="12" y2="15" />
+                      </svg>
+                      <span style={{ fontSize: "0.88rem", fontWeight: 600, color: "var(--color-primary)" }}>
+                        Click to upload PDF / DOCX resume
+                      </span>
+                      <span style={{ fontSize: "0.76rem", color: "var(--color-text-faint)" }}>
+                        Supports PDF, DOC, DOCX up to 10MB
+                      </span>
+                      <input
+                        type="file"
+                        id="modal-resume-file"
+                        accept=".pdf,.doc,.docx"
+                        onChange={handleFileChange}
+                        className={styles.fileInputHidden}
+                      />
+                    </div>
+                  )}
+
                   {applyErrors.resumeUrl && (
                     <span className={styles.errorText} id="modal-error-resume">{applyErrors.resumeUrl}</span>
                   )}
@@ -560,13 +654,20 @@ export default function JobsClient({ jobs }: JobsClientProps) {
                   />
                 </div>
 
+                {serverError && (
+                  <div className={styles.errorText} style={{ fontSize: "0.9rem" }} role="alert">
+                    ⚠️ {serverError}
+                  </div>
+                )}
+
                 <button
                   type="submit"
                   className="btn btn-primary"
                   style={{ width: "100%" }}
                   id="modal-submit-application-btn"
+                  disabled={isSubmitting}
                 >
-                  Submit Application
+                  {isSubmitting ? "Submitting Application..." : "Submit Application"}
                 </button>
               </form>
             )}
