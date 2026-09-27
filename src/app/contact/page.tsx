@@ -89,20 +89,62 @@ export default function Contact() {
     if (validate()) {
       setIsSubmitting(true);
       try {
-        const res = await fetch("/api/contact", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        });
+        let success = false;
+        
+        // 1. Try server API route first
+        try {
+          const res = await fetch("/api/contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
+          });
 
-        const data = await res.json();
+          if (res.ok) {
+            const data = await res.json();
+            if (data.success) success = true;
+          }
+        } catch {
+          // If server route is 404/405 (static export on GitHub Pages), fallback to direct submission
+        }
 
-        if (res.ok && data.success) {
+        // 2. Direct fallback to Google Form for static GitHub Pages hosting
+        if (!success) {
+          const formUrl =
+            process.env.NEXT_PUBLIC_CONTACT_GOOGLE_FORM_URL ||
+            process.env.CONTACT_GOOGLE_FORM_URL ||
+            "https://docs.google.com/forms/d/e/1FAIpQLSdFGvuRX1uvm7qd6et-cLfKrVgtu6Iatpiit0KKdqNmNUoRoQ/formResponse";
+
+          const entries = {
+            name: process.env.NEXT_PUBLIC_CONTACT_GOOGLE_ENTRY_NAME || process.env.CONTACT_GOOGLE_ENTRY_NAME || "entry.325152679",
+            email: process.env.NEXT_PUBLIC_CONTACT_GOOGLE_ENTRY_EMAIL || process.env.CONTACT_GOOGLE_ENTRY_EMAIL || "entry.111448149",
+            inquiryType: process.env.NEXT_PUBLIC_CONTACT_GOOGLE_ENTRY_INQUIRY_TYPE || process.env.CONTACT_GOOGLE_ENTRY_INQUIRY_TYPE || "entry.1794566122",
+            subject: process.env.NEXT_PUBLIC_CONTACT_GOOGLE_ENTRY_SUBJECT || process.env.CONTACT_GOOGLE_ENTRY_SUBJECT || "entry.429302489",
+            message: process.env.NEXT_PUBLIC_CONTACT_GOOGLE_ENTRY_MESSAGE || process.env.CONTACT_GOOGLE_ENTRY_MESSAGE || "entry.1225350480",
+          };
+
+          const params = new URLSearchParams();
+          params.append(entries.name, formData.name);
+          params.append(entries.email, formData.email);
+          params.append(entries.inquiryType, formData.inquiryType);
+          params.append(entries.subject, formData.subject);
+          params.append(entries.message, formData.message);
+
+          await fetch(formUrl, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: params.toString(),
+          });
+
+          success = true;
+        }
+
+        if (success) {
           setSubmitted(true);
           setFormData(INITIAL_FORM);
           setErrors({});
         } else {
-          setServerError(data.error || "Failed to send message. Please try again later.");
+          setServerError("Failed to send message. Please try again later.");
         }
       } catch (err) {
         console.error("Submission error:", err);
