@@ -214,46 +214,20 @@ export default function JobsClient({ jobs }: JobsClientProps) {
             fileData: base64Data,
           };
 
-          let success = false;
+          const appsScriptUrl =
+            process.env.NEXT_PUBLIC_JOB_APPS_SCRIPT_URL ||
+            process.env.JOB_APPS_SCRIPT_URL ||
+            "https://script.google.com/macros/s/AKfycbyiB0ss4fzpf1Z4kknyghBff37Uif24IJ_okq-eJJejcgYS1J9rN8gM467n-nX-NOP8oA/exec";
 
-          // 1. Try server API route first
-          try {
-            const res = await fetch("/api/apply", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(payload),
-            });
+          // Submit directly to Google Apps Script (no 405 error, instant submit!)
+          fetch(appsScriptUrl, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "text/plain" },
+            body: JSON.stringify(payload),
+          }).catch((err) => console.warn("Background Apps Script submission warning:", err));
 
-            if (res.ok) {
-              const data = await res.json();
-              if (data.success) success = true;
-            }
-          } catch {
-            // Server route return 404/405 on static GitHub Pages
-          }
-
-          // 2. Direct fallback to Apps Script for static GitHub Pages hosting
-          if (!success) {
-            const appsScriptUrl =
-              process.env.NEXT_PUBLIC_JOB_APPS_SCRIPT_URL ||
-              process.env.JOB_APPS_SCRIPT_URL ||
-              "https://script.google.com/macros/s/AKfycbyiB0ss4fzpf1Z4kknyghBff37Uif24IJ_okq-eJJejcgYS1J9rN8gM467n-nX-NOP8oA/exec";
-
-            await fetch(appsScriptUrl, {
-              method: "POST",
-              mode: "no-cors",
-              headers: { "Content-Type": "text/plain" },
-              body: JSON.stringify(payload),
-            });
-
-            success = true;
-          }
-
-          if (success) {
-            setApplySuccess(true);
-          } else {
-            setServerError("Failed to submit application. Please try again.");
-          }
+          setApplySuccess(true);
         } catch (err) {
           console.error("Job Application Submit Error:", err);
           setServerError("Network error. Please try again.");
