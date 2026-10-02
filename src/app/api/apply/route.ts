@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { jobTitle, name, email, coverNote, fileName, fileType, fileData } = body;
+    const { jobTitle, name, email, mobile, experience, skills, coverNote, fileName, fileType, fileData } = body;
 
     const appsScriptUrl = process.env.JOB_APPS_SCRIPT_URL;
     const formUrl = process.env.JOB_GOOGLE_FORM_URL;
@@ -12,6 +12,9 @@ export async function POST(request: Request) {
       jobTitle: process.env.JOB_GOOGLE_ENTRY_JOB_TITLE,
       name: process.env.JOB_GOOGLE_ENTRY_NAME,
       email: process.env.JOB_GOOGLE_ENTRY_EMAIL,
+      mobile: process.env.JOB_GOOGLE_ENTRY_MOBILE,
+      experience: process.env.JOB_GOOGLE_ENTRY_EXPERIENCE,
+      skills: process.env.JOB_GOOGLE_ENTRY_SKILLS,
       resumeLink: process.env.JOB_GOOGLE_ENTRY_RESUME_LINK,
       coverNote: process.env.JOB_GOOGLE_ENTRY_COVER_NOTE,
     };
@@ -29,6 +32,9 @@ export async function POST(request: Request) {
               jobTitle,
               name,
               email,
+              mobile,
+              experience,
+              skills,
               coverNote,
               fileName,
               fileType,
@@ -47,6 +53,9 @@ export async function POST(request: Request) {
           if (entries.jobTitle) params.append(entries.jobTitle, jobTitle || "");
           if (entries.name) params.append(entries.name, name || "");
           if (entries.email) params.append(entries.email, email || "");
+          if (entries.mobile && mobile) params.append(entries.mobile, mobile);
+          if (entries.experience && experience) params.append(entries.experience, experience);
+          if (entries.skills && skills) params.append(entries.skills, skills);
 
           if (entries.coverNote) {
             const fileTag = fileName ? `[Attached File: ${fileName}]` : "";

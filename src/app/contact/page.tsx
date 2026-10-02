@@ -10,6 +10,7 @@ import styles from "./contact.module.css";
 interface FormData {
   name: string;
   email: string;
+  mobile: string;
   subject: string;
   message: string;
   inquiryType: string;
@@ -18,6 +19,7 @@ interface FormData {
 interface FormErrors {
   name?: string;
   email?: string;
+  mobile?: string;
   subject?: string;
   message?: string;
 }
@@ -25,6 +27,7 @@ interface FormErrors {
 const INITIAL_FORM: FormData = {
   name: "",
   email: "",
+  mobile: "",
   subject: "",
   message: "",
   inquiryType: "Looking to Hire Talent",
@@ -55,6 +58,11 @@ export default function Contact() {
         tempErrors.email = "Please enter a valid email address.";
         isValid = false;
       }
+    }
+
+    if (!formData.mobile.trim()) {
+      tempErrors.mobile = "Contact number is required.";
+      isValid = false;
     }
 
     if (!formData.subject.trim()) {
@@ -98,6 +106,7 @@ export default function Contact() {
           name: process.env.NEXT_PUBLIC_CONTACT_GOOGLE_ENTRY_NAME || process.env.CONTACT_GOOGLE_ENTRY_NAME || "entry.325152679",
           email: process.env.NEXT_PUBLIC_CONTACT_GOOGLE_ENTRY_EMAIL || process.env.CONTACT_GOOGLE_ENTRY_EMAIL || "entry.111448149",
           inquiryType: process.env.NEXT_PUBLIC_CONTACT_GOOGLE_ENTRY_INQUIRY_TYPE || process.env.CONTACT_GOOGLE_ENTRY_INQUIRY_TYPE || "entry.1794566122",
+          mobile: process.env.NEXT_PUBLIC_CONTACT_GOOGLE_ENTRY_MOBILE || process.env.CONTACT_GOOGLE_ENTRY_MOBILE || "entry.1411558152",
           subject: process.env.NEXT_PUBLIC_CONTACT_GOOGLE_ENTRY_SUBJECT || process.env.CONTACT_GOOGLE_ENTRY_SUBJECT || "entry.429302489",
           message: process.env.NEXT_PUBLIC_CONTACT_GOOGLE_ENTRY_MESSAGE || process.env.CONTACT_GOOGLE_ENTRY_MESSAGE || "entry.1225350480",
         };
@@ -106,6 +115,7 @@ export default function Contact() {
         params.append(entries.name, formData.name);
         params.append(entries.email, formData.email);
         params.append(entries.inquiryType, formData.inquiryType);
+        if (entries.mobile) params.append(entries.mobile, formData.mobile);
         params.append(entries.subject, formData.subject);
         params.append(entries.message, formData.message);
 
@@ -229,23 +239,42 @@ export default function Contact() {
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label htmlFor="subject" className={styles.label}>
-                    Subject <span className={styles.req}>(required)</span>
+                  <label htmlFor="mobile" className={styles.label}>
+                    Contact Number <span className={styles.req}>(required)</span>
                   </label>
                   <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
+                    type="tel"
+                    id="mobile"
+                    name="mobile"
+                    value={formData.mobile}
                     onChange={handleChange}
-                    className={fieldClass("subject")}
-                    placeholder="e.g. Scaling Tech Team / Hiring Developers"
+                    className={fieldClass("mobile")}
+                    placeholder="e.g. +91 98765 43210"
                     required
                   />
-                  {errors.subject && (
-                    <span className={styles.errorText} id="error-subject">{errors.subject}</span>
+                  {errors.mobile && (
+                    <span className={styles.errorText} id="error-mobile">{errors.mobile}</span>
                   )}
                 </div>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label htmlFor="subject" className={styles.label}>
+                  Subject <span className={styles.req}>(required)</span>
+                </label>
+                <input
+                  type="text"
+                  id="subject"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  className={fieldClass("subject")}
+                  placeholder="e.g. Scaling Tech Team / Hiring Developers"
+                  required
+                />
+                {errors.subject && (
+                  <span className={styles.errorText} id="error-subject">{errors.subject}</span>
+                )}
               </div>
 
               <div className={styles.formGroup}>

@@ -21,6 +21,9 @@ export interface JobOpening {
 interface ApplyForm {
   name: string;
   email: string;
+  mobile: string;
+  experience: string;
+  skills: string;
   resumeUrl: string;
   coverNote: string;
 }
@@ -28,10 +31,21 @@ interface ApplyForm {
 interface ApplyErrors {
   name?: string;
   email?: string;
+  mobile?: string;
+  experience?: string;
+  skills?: string;
   resumeUrl?: string;
 }
 
-const EMPTY_FORM: ApplyForm = { name: "", email: "", resumeUrl: "", coverNote: "" };
+const EMPTY_FORM: ApplyForm = {
+  name: "",
+  email: "",
+  mobile: "",
+  experience: "",
+  skills: "",
+  resumeUrl: "",
+  coverNote: "",
+};
 
 interface JobsClientProps {
   jobs: JobOpening[];
@@ -190,6 +204,21 @@ export default function JobsClient({ jobs }: JobsClientProps) {
       }
     }
 
+    if (!applyForm.mobile.trim()) {
+      tempErrors.mobile = "Contact number is required.";
+      isValid = false;
+    }
+
+    if (!applyForm.experience.trim()) {
+      tempErrors.experience = "Total years of experience is required.";
+      isValid = false;
+    }
+
+    if (!applyForm.skills.trim()) {
+      tempErrors.skills = "Key skills are required.";
+      isValid = false;
+    }
+
     if (!selectedFile) {
       tempErrors.resumeUrl = "Please select a resume file to upload.";
       isValid = false;
@@ -208,6 +237,9 @@ export default function JobsClient({ jobs }: JobsClientProps) {
             jobTitle: selectedJob.title,
             name: applyForm.name,
             email: applyForm.email,
+            mobile: applyForm.mobile,
+            experience: applyForm.experience,
+            skills: applyForm.skills,
             coverNote: applyForm.coverNote,
             fileName: selectedFile.name,
             fileType: selectedFile.type,
@@ -226,6 +258,43 @@ export default function JobsClient({ jobs }: JobsClientProps) {
             headers: { "Content-Type": "text/plain" },
             body: JSON.stringify(payload),
           }).catch((err) => console.warn("Background Apps Script submission warning:", err));
+
+          // Also submit to Google Form if configured
+          const formUrl =
+            process.env.NEXT_PUBLIC_JOB_GOOGLE_FORM_URL ||
+            process.env.JOB_GOOGLE_FORM_URL;
+
+          const entries = {
+            jobTitle: process.env.NEXT_PUBLIC_JOB_GOOGLE_ENTRY_JOB_TITLE || process.env.JOB_GOOGLE_ENTRY_JOB_TITLE || "entry.285622606",
+            name: process.env.NEXT_PUBLIC_JOB_GOOGLE_ENTRY_NAME || process.env.JOB_GOOGLE_ENTRY_NAME || "entry.1399942842",
+            email: process.env.NEXT_PUBLIC_JOB_GOOGLE_ENTRY_EMAIL || process.env.JOB_GOOGLE_ENTRY_EMAIL || "entry.2095566212",
+            mobile: process.env.NEXT_PUBLIC_JOB_GOOGLE_ENTRY_MOBILE || process.env.JOB_GOOGLE_ENTRY_MOBILE,
+            experience: process.env.NEXT_PUBLIC_JOB_GOOGLE_ENTRY_EXPERIENCE || process.env.JOB_GOOGLE_ENTRY_EXPERIENCE,
+            skills: process.env.NEXT_PUBLIC_JOB_GOOGLE_ENTRY_SKILLS || process.env.JOB_GOOGLE_ENTRY_SKILLS,
+            coverNote: process.env.NEXT_PUBLIC_JOB_GOOGLE_ENTRY_COVER_NOTE || process.env.JOB_GOOGLE_ENTRY_COVER_NOTE || "entry.1676772419",
+          };
+
+          if (formUrl) {
+            const params = new URLSearchParams();
+            if (entries.jobTitle) params.append(entries.jobTitle, selectedJob.title);
+            if (entries.name) params.append(entries.name, applyForm.name);
+            if (entries.email) params.append(entries.email, applyForm.email);
+            if (entries.mobile && applyForm.mobile) params.append(entries.mobile, applyForm.mobile);
+            if (entries.experience && applyForm.experience) params.append(entries.experience, applyForm.experience);
+            if (entries.skills && applyForm.skills) params.append(entries.skills, applyForm.skills);
+            if (entries.coverNote) {
+              const fileTag = selectedFile ? `[Resume Attached: ${selectedFile.name}]` : "";
+              const noteText = `${fileTag}${applyForm.coverNote ? "\n\nNote: " + applyForm.coverNote : ""}`.trim();
+              params.append(entries.coverNote, noteText);
+            }
+
+            fetch(formUrl, {
+              method: "POST",
+              mode: "no-cors",
+              headers: { "Content-Type": "application/x-www-form-urlencoded" },
+              body: params.toString(),
+            }).catch((err) => console.warn("Google Form submission warning:", err));
+          }
 
           setApplySuccess(true);
         } catch (err) {
@@ -585,6 +654,63 @@ export default function JobsClient({ jobs }: JobsClientProps) {
                   />
                   {applyErrors.email && (
                     <span className={styles.errorText} id="modal-error-email">{applyErrors.email}</span>
+                  )}
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="modal-mobile" className={styles.label}>
+                    Contact Number <span className={styles.req}>(required)</span>
+                  </label>
+                  <input
+                    type="tel"
+                    id="modal-mobile"
+                    name="mobile"
+                    value={applyForm.mobile}
+                    onChange={handleApplyChange}
+                    className={`${styles.input} ${applyErrors.mobile ? styles.inputError : ""}`}
+                    placeholder="e.g. +91 98765 43210"
+                    required
+                  />
+                  {applyErrors.mobile && (
+                    <span className={styles.errorText} id="modal-error-mobile">{applyErrors.mobile}</span>
+                  )}
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="modal-experience" className={styles.label}>
+                    Total Years of Experience <span className={styles.req}>(required)</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="modal-experience"
+                    name="experience"
+                    value={applyForm.experience}
+                    onChange={handleApplyChange}
+                    className={`${styles.input} ${applyErrors.experience ? styles.inputError : ""}`}
+                    placeholder="e.g. 5 years (or 3.5)"
+                    required
+                  />
+                  {applyErrors.experience && (
+                    <span className={styles.errorText} id="modal-error-experience">{applyErrors.experience}</span>
+                  )}
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="modal-skills" className={styles.label}>
+                    Skills <span className={styles.req}>(required)</span>
+                  </label>
+                  <textarea
+                    id="modal-skills"
+                    name="skills"
+                    value={applyForm.skills}
+                    onChange={handleApplyChange}
+                    className={`${styles.textarea} ${applyErrors.skills ? styles.inputError : ""}`}
+                    placeholder="Describe your technical skills, primary tech stack, frameworks, or domain expertise..."
+                    rows={3}
+                    required
+                  />
+                  {applyErrors.skills && (
+                    <span className={styles.errorText} id="modal-error-skills">{applyErrors.skills}</span>
                   )}
                 </div>
 

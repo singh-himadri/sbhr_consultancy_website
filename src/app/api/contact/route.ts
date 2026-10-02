@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, email, inquiryType, subject, message } = body;
+    const { name, email, mobile, inquiryType, subject, message } = body;
 
     const formUrl = process.env.CONTACT_GOOGLE_FORM_URL;
 
@@ -11,6 +11,7 @@ export async function POST(request: Request) {
       name: process.env.CONTACT_GOOGLE_ENTRY_NAME,
       email: process.env.CONTACT_GOOGLE_ENTRY_EMAIL,
       inquiryType: process.env.CONTACT_GOOGLE_ENTRY_INQUIRY_TYPE,
+      mobile: process.env.CONTACT_GOOGLE_ENTRY_MOBILE,
       subject: process.env.CONTACT_GOOGLE_ENTRY_SUBJECT,
       message: process.env.CONTACT_GOOGLE_ENTRY_MESSAGE,
     };
@@ -30,6 +31,7 @@ export async function POST(request: Request) {
     if (entries.name) params.append(entries.name, name || "");
     if (entries.email) params.append(entries.email, email || "");
     if (entries.inquiryType) params.append(entries.inquiryType, inquiryType || "");
+    if (entries.mobile) params.append(entries.mobile, mobile || "");
     if (entries.subject) params.append(entries.subject, subject || "");
     if (entries.message) params.append(entries.message, message || "");
 
@@ -41,11 +43,9 @@ export async function POST(request: Request) {
       body: params.toString(),
     });
 
-    // Google Forms returns a 200 OK or 302 redirect on success
     if (googleRes.ok || googleRes.status === 200 || googleRes.redirected) {
       return NextResponse.json({ success: true });
     } else {
-      // Even if fetch is opaque or redirected, Google Forms usually responds with 200/302
       return NextResponse.json({ success: true });
     }
   } catch (error) {
